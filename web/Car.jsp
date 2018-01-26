@@ -5,7 +5,10 @@
 --%>
 
 <%@page contentType="text/html" pageEncoding="UTF-8"%>
+
 <%@page import="java.util.*"%>
+<%@page import="MyClasses.Person"%>
+<%@page import="MyClasses.PersonDBUtil"%>
 <%@page import="MyClasses.Car"%>
 <%@page import="MyClasses.CarDBUtil"%>
 <%@page import="java.text.SimpleDateFormat"%>
@@ -19,7 +22,7 @@
                 return  false;
             }
             function RegisterNew() {
-                window.open("Index.jsp");
+                window.open("NewCar.jsp");
 
             }
         </script><style>
@@ -70,30 +73,22 @@
                 text-shadow: 3px 2px #e7e7e7;
             }
         </style>
-        <title>People</title>
+        <title>Car</title>
     </head>
     <body >
         <div class="fullScreen">
             <a href="loginPage.jsp">Logout</a>
             <a href="MainMenu.jsp">Go to Menu</a>
             <form >
-                <input type="submit" class="button buttonPurple" onclick="RegisterNew()" value="Register New" /> 
+                <input type="submit" class="button buttonPurple" onclick="RegisterNew()" value="Add New" /> 
 
                 <input type="submit" class="button buttonGray" value="Print" onclick="printPage()" />
-            </form><center><h1>People List </h1>
-                <form name="SearchForm" action="People.jsp" method="">
+            </form><center><h1>Car List </h1>
+                <form name="SearchForm" action="Car.jsp" method="">
                     <table >
                         <tr>
-                            <td>ID</td>
-                            <td colspan="7"> <input type="number" name="txtID"  size="50" /> </td>
-                        </tr>
-                        <tr>
-                            <td colspan="1">Name</td>
+                            <td colspan="1">Model</td>
                             <td colspan="7"><input type="text" name="txtKeyword"  size="50" />  </td>
-                        </tr>
-                        <tr>
-                            <td>Phone Number</td>
-                            <td colspan="7"> <input type="text" name="txtPhone"  size="50" /> </td>
                         </tr>
                         <tr>
                             <td></td>
@@ -105,13 +100,12 @@
                     <thead>
                         <tr>
                             <th>ID</th>
-                            <th>Full Name</th>
-                            <th>Username</th>
-                            <th>Password</th>
-                            <th>Email</th>
+                            <th>Model</th>
+                            <th>License N</th>
+                            <th>Color</th>
+                            <th>Owner</th>
                             <th>Phone No</th>
-                            <th>Birthday</th>
-                            <th>Role</th>
+                            
                                 <%//if authorized then%>
                             <th>Edit</th>
                             <th>Delete</th>
@@ -148,10 +142,8 @@
                             }
                             //SEARCH
                             String key = request.getParameter("txtKeyword") == null ? "" : request.getParameter("txtKeyword");
-                            String phoneN = request.getParameter("txtPhone") == null ? "" : request.getParameter("txtPhone");
-                            int personID = request.getParameter("txtID") == null || request.getParameter("txtID") == "" ? 0 : Integer.parseInt(request.getParameter("txtID"));
-
-                            List<Car> allCars = carDBUtil.getAllCars();
+                           
+                            List<Car> allCars = carDBUtil.getAllCars(key);
 
                             for (Car oneCar : allCars) {
                         %>
@@ -164,13 +156,13 @@
                             <td class="td1"><%=oneCar.getCar_driver_foreign_id()%></td>
                             <!--Edit button-->
                             <td class="td1" align=" center">
-                                <form name="toEditForm" action="People.jsp" method="">  
+                                <form name="toEditForm" action="Car.jsp" method="">  
                                     <input type="text" name="txtEdit" value="<%=oneCar.getCar_id()%>" size="50" style="display:none" />
                                     <input class="button buttonPurple" type="submit" value="Edit"   />
                                 </form>
                             </td>
                             <!--Delete Button-->
-                    <form name="DeleteForm" action="People.jsp" method="">
+                    <form name="DeleteForm" action="Car.jsp" method="">
                         <td  class="td1" align=" center"> <input type="text" name="txtDelete" value="<%=oneCar.getCar_id()%>" size="50" style="display:none" />
                             <input class="button buttonGray" type="submit" value="Delete" name="btnDelete"   />
                         </td>
@@ -180,13 +172,36 @@
 
                     %>
                     <tr>
-                    <form name="EditForm" action="People.jsp" method="">                        
+                    <form name="EditForm" action="Car.jsp" method="">                        
                         <td class="td1"><%=oneCar.getCar_id()%></td>
                         <td class="td1"><input type="text" name="txtCar_model" value="<%=oneCar.getCar_model()%>" width="50"/></td>
                         <td class="td1"><input type="text" name="txtCar_licence_number" value="<%=oneCar.getCar_licence_number()%>" width="50"/></td>
-                        <td class="td1"><input type="text" name="txtCar_color" value="<%=oneCar.getCar_color()%>" width="50"/></td>
-                        <td class="td1"><input type="text" name="txtCar_driver_foreign_id" value="<%=oneCar.getCar_driver_foreign_id()%>" width="50"/></td>
+                    <td>
+                            <select required name="cbxColor">
+                                <option  value="<%=oneCar.getCar_color()%>"><%=oneCar.getCar_color()%></option>
+                                <option value="Black">Black</option>
+                                <option value="White">White</option>
+                                <option value="Blue">Blue</option>
+                                <option value="Red">Red</option>
+                                <option value="Other">Other</option>
+                            </select>
+                        </td>
+<!--                        <td class="td1"><input type="text" name="txtCar_driver_foreign_id" value="<%=oneCar.getCar_driver_foreign_id()%>" width="50"/></td>-->
+  <td>
+                            <select required name="cbxOwner">
+                                <option  value="">---Select---</option>
+                                
+                                <%
+                            PersonDBUtil personDBUtil = new PersonDBUtil();
+                            List<Person> allPeople = personDBUtil.getAllPeople("", "", 0);
 
+                            for (Person onePerson : allPeople) { %>
+                                <option value="<%=onePerson.getPerson_id()%>"><%=onePerson.getPerson_full_name()%></option>
+                                
+                    <%}
+                        %>
+                            </select>
+                        </td>
                         <td class="td1" align=" center"> 
                             <input type="text" name="txtUpdate" value="<%=oneCar.getCar_id()%>" size="50" style="display:none" />
                             <input class="button " type="submit" value="btnUpdate"   />

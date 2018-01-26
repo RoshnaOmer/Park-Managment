@@ -63,7 +63,7 @@
                     </tr>
                     <tr>
                         <td>Email: </td>
-                        <td><input type="text" name="txtEmail" value="" required="true" size="50" /></td>
+                        <td><input type="email" name="txtEmail" value="" required="true" size="50" /></td>
                     </tr>
 <!--                    <tr>
                         <td>Gender: </td>

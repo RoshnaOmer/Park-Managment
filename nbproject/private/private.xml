@@ -4,12 +4,12 @@
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
             <file>file:/C:/Users/roshn/Documents/NetBeansProjects/FormsWebApplication/src/java/MyClasses/PersonDBUtil.java</file>
-            <file>file:/C:/Users/roshn/Documents/NetBeansProjects/FormsWebApplication/src/java/MyClasses/Car.java</file>
-            <file>file:/C:/Users/roshn/Documents/NetBeansProjects/FormsWebApplication/web/display.jsp</file>
+            <file>file:/C:/Users/roshn/Documents/NetBeansProjects/FormsWebApplication/web/NewCar.jsp</file>
+            <file>file:/C:/Users/roshn/Documents/NetBeansProjects/FormsWebApplication/src/java/MyClasses/CarDBUtil.java</file>
+            <file>file:/C:/Users/roshn/Documents/NetBeansProjects/FormsWebApplication/web/CarDisplay.jsp</file>
             <file>file:/C:/Users/roshn/Documents/NetBeansProjects/FormsWebApplication/src/java/MyClasses/Person.java</file>
             <file>file:/C:/Users/roshn/Documents/NetBeansProjects/FormsWebApplication/web/Car.jsp</file>
             <file>file:/C:/Users/roshn/Documents/NetBeansProjects/FormsWebApplication/web/People.jsp</file>
-            <file>file:/C:/Users/roshn/Documents/NetBeansProjects/FormsWebApplication/web/MainMenu.jsp</file>
         </group>
     </open-files>
 </project-private>

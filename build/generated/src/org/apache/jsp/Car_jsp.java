@@ -4,6 +4,8 @@ import javax.servlet.*;
 import javax.servlet.http.*;
 import javax.servlet.jsp.*;
 import java.util.*;
+import MyClasses.Person;
+import MyClasses.PersonDBUtil;
 import MyClasses.Car;
 import MyClasses.CarDBUtil;
 import java.text.SimpleDateFormat;
@@ -52,6 +54,9 @@ public final class Car_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("\n");
       out.write("\n");
       out.write("\n");
+      out.write("\n");
+      out.write("\n");
+      out.write("\n");
       out.write("<!DOCTYPE html>\n");
       out.write("<html>\n");
       out.write("    <head>\n");
@@ -62,7 +67,7 @@ public final class Car_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("                return  false;\n");
       out.write("            }\n");
       out.write("            function RegisterNew() {\n");
-      out.write("                window.open(\"Index.jsp\");\n");
+      out.write("                window.open(\"NewCar.jsp\");\n");
       out.write("\n");
       out.write("            }\n");
       out.write("        </script><style>\n");
@@ -113,30 +118,22 @@ public final class Car_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("                text-shadow: 3px 2px #e7e7e7;\n");
       out.write("            }\n");
       out.write("        </style>\n");
-      out.write("        <title>People</title>\n");
+      out.write("        <title>Car</title>\n");
       out.write("    </head>\n");
       out.write("    <body >\n");
       out.write("        <div class=\"fullScreen\">\n");
       out.write("            <a href=\"loginPage.jsp\">Logout</a>\n");
       out.write("            <a href=\"MainMenu.jsp\">Go to Menu</a>\n");
       out.write("            <form >\n");
-      out.write("                <input type=\"submit\" class=\"button buttonPurple\" onclick=\"RegisterNew()\" value=\"Register New\" /> \n");
+      out.write("                <input type=\"submit\" class=\"button buttonPurple\" onclick=\"RegisterNew()\" value=\"Add New\" /> \n");
       out.write("\n");
       out.write("                <input type=\"submit\" class=\"button buttonGray\" value=\"Print\" onclick=\"printPage()\" />\n");
-      out.write("            </form><center><h1>People List </h1>\n");
-      out.write("                <form name=\"SearchForm\" action=\"People.jsp\" method=\"\">\n");
+      out.write("            </form><center><h1>Car List </h1>\n");
+      out.write("                <form name=\"SearchForm\" action=\"Car.jsp\" method=\"\">\n");
       out.write("                    <table >\n");
       out.write("                        <tr>\n");
-      out.write("                            <td>ID</td>\n");
-      out.write("                            <td colspan=\"7\"> <input type=\"number\" name=\"txtID\"  size=\"50\" /> </td>\n");
-      out.write("                        </tr>\n");
-      out.write("                        <tr>\n");
-      out.write("                            <td colspan=\"1\">Name</td>\n");
+      out.write("                            <td colspan=\"1\">Model</td>\n");
       out.write("                            <td colspan=\"7\"><input type=\"text\" name=\"txtKeyword\"  size=\"50\" />  </td>\n");
-      out.write("                        </tr>\n");
-      out.write("                        <tr>\n");
-      out.write("                            <td>Phone Number</td>\n");
-      out.write("                            <td colspan=\"7\"> <input type=\"text\" name=\"txtPhone\"  size=\"50\" /> </td>\n");
       out.write("                        </tr>\n");
       out.write("                        <tr>\n");
       out.write("                            <td></td>\n");
@@ -148,13 +145,12 @@ public final class Car_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("                    <thead>\n");
       out.write("                        <tr>\n");
       out.write("                            <th>ID</th>\n");
-      out.write("                            <th>Full Name</th>\n");
-      out.write("                            <th>Username</th>\n");
-      out.write("                            <th>Password</th>\n");
-      out.write("                            <th>Email</th>\n");
+      out.write("                            <th>Model</th>\n");
+      out.write("                            <th>License N</th>\n");
+      out.write("                            <th>Color</th>\n");
+      out.write("                            <th>Owner</th>\n");
       out.write("                            <th>Phone No</th>\n");
-      out.write("                            <th>Birthday</th>\n");
-      out.write("                            <th>Role</th>\n");
+      out.write("                            \n");
       out.write("                                ");
 //if authorized then
       out.write("\n");
@@ -181,8 +177,8 @@ public final class Car_jsp extends org.apache.jasper.runtime.HttpJspBase
                                 String txtCar_licence_number = request.getParameter("txtCar_licence_number");
                                 String txtCar_color = request.getParameter("txtCar_color");
                                 int txtCar_driver_foreign_id = Integer.getInteger(request.getParameter("txtCar_driver_foreign_id"));
-                                
-                                Car newCar = new Car(UpdateID,txtCar_driver_foreign_id, txtCar_color, txtCar_model, txtCar_licence_number);
+
+                                Car newCar = new Car(UpdateID, txtCar_driver_foreign_id, txtCar_color, txtCar_model, txtCar_licence_number);
 
 //                                carDBUtil.UpdateCar(newCar);
                             }
@@ -194,10 +190,8 @@ public final class Car_jsp extends org.apache.jasper.runtime.HttpJspBase
                             }
                             //SEARCH
                             String key = request.getParameter("txtKeyword") == null ? "" : request.getParameter("txtKeyword");
-                            String phoneN = request.getParameter("txtPhone") == null ? "" : request.getParameter("txtPhone");
-                            int personID = request.getParameter("txtID") == null || request.getParameter("txtID") == "" ? 0 : Integer.parseInt(request.getParameter("txtID"));
-
-                            List<Car> allCars = carDBUtil.getAllCars();
+                           
+                            List<Car> allCars = carDBUtil.getAllCars(key);
 
                             for (Car oneCar : allCars) {
                         
@@ -221,7 +215,7 @@ public final class Car_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("</td>\n");
       out.write("                            <!--Edit button-->\n");
       out.write("                            <td class=\"td1\" align=\" center\">\n");
-      out.write("                                <form name=\"toEditForm\" action=\"People.jsp\" method=\"\">  \n");
+      out.write("                                <form name=\"toEditForm\" action=\"Car.jsp\" method=\"\">  \n");
       out.write("                                    <input type=\"text\" name=\"txtEdit\" value=\"");
       out.print(oneCar.getCar_id());
       out.write("\" size=\"50\" style=\"display:none\" />\n");
@@ -229,7 +223,7 @@ public final class Car_jsp extends org.apache.jasper.runtime.HttpJspBase
       out.write("                                </form>\n");
       out.write("                            </td>\n");
       out.write("                            <!--Delete Button-->\n");
-      out.write("                    <form name=\"DeleteForm\" action=\"People.jsp\" method=\"\">\n");
+      out.write("                    <form name=\"DeleteForm\" action=\"Car.jsp\" method=\"\">\n");
       out.write("                        <td  class=\"td1\" align=\" center\"> <input type=\"text\" name=\"txtDelete\" value=\"");
       out.print(oneCar.getCar_id());
       out.write("\" size=\"50\" style=\"display:none\" />\n");
@@ -243,7 +237,7 @@ if (EditID == oneCar.getCar_id()) {
                     
       out.write("\n");
       out.write("                    <tr>\n");
-      out.write("                    <form name=\"EditForm\" action=\"People.jsp\" method=\"\">                        \n");
+      out.write("                    <form name=\"EditForm\" action=\"Car.jsp\" method=\"\">                        \n");
       out.write("                        <td class=\"td1\">");
       out.print(oneCar.getCar_id());
       out.write("</td>\n");
@@ -253,13 +247,48 @@ if (EditID == oneCar.getCar_id()) {
       out.write("                        <td class=\"td1\"><input type=\"text\" name=\"txtCar_licence_number\" value=\"");
       out.print(oneCar.getCar_licence_number());
       out.write("\" width=\"50\"/></td>\n");
-      out.write("                        <td class=\"td1\"><input type=\"text\" name=\"txtCar_color\" value=\"");
+      out.write("                    <td>\n");
+      out.write("                            <select required name=\"cbxColor\">\n");
+      out.write("                                <option  value=\"");
       out.print(oneCar.getCar_color());
-      out.write("\" width=\"50\"/></td>\n");
-      out.write("                        <td class=\"td1\"><input type=\"text\" name=\"txtCar_driver_foreign_id\" value=\"");
+      out.write('"');
+      out.write('>');
+      out.print(oneCar.getCar_color());
+      out.write("</option>\n");
+      out.write("                                <option value=\"Black\">Black</option>\n");
+      out.write("                                <option value=\"White\">White</option>\n");
+      out.write("                                <option value=\"Blue\">Blue</option>\n");
+      out.write("                                <option value=\"Red\">Red</option>\n");
+      out.write("                                <option value=\"Other\">Other</option>\n");
+      out.write("                            </select>\n");
+      out.write("                        </td>\n");
+      out.write("<!--                        <td class=\"td1\"><input type=\"text\" name=\"txtCar_driver_foreign_id\" value=\"");
       out.print(oneCar.getCar_driver_foreign_id());
-      out.write("\" width=\"50\"/></td>\n");
+      out.write("\" width=\"50\"/></td>-->\n");
+      out.write("  <td>\n");
+      out.write("                            <select required name=\"cbxOwner\">\n");
+      out.write("                                <option  value=\"\">---Select---</option>\n");
+      out.write("                                \n");
+      out.write("                                ");
+
+                            PersonDBUtil personDBUtil = new PersonDBUtil();
+                            List<Person> allPeople = personDBUtil.getAllPeople("", "", 0);
+
+                            for (Person onePerson : allPeople) { 
       out.write("\n");
+      out.write("                                <option value=\"");
+      out.print(onePerson.getPerson_id());
+      out.write('"');
+      out.write('>');
+      out.print(onePerson.getPerson_full_name());
+      out.write("</option>\n");
+      out.write("                                \n");
+      out.write("                    ");
+}
+                        
+      out.write("\n");
+      out.write("                            </select>\n");
+      out.write("                        </td>\n");
       out.write("                        <td class=\"td1\" align=\" center\"> \n");
       out.write("                            <input type=\"text\" name=\"txtUpdate\" value=\"");
       out.print(oneCar.getCar_id());

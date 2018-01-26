@@ -64,7 +64,7 @@ public class PersonDBUtil {
                     q += " and (( person_id =" + ID + "))";
                 }
                 reset = stmt.executeQuery(q);
-// Print the data to the console
+                
                 while (reset.next()) {
                     Person p = new Person(reset.getInt("person_id"), reset.getInt("role_foreign_id"), reset.getString("person_full_name"), reset.getString("person_email"),
                             reset.getString("person_username"), reset.getString("person_password"), reset.getString("person_phone_no"), reset.getDate("person_birthday"));

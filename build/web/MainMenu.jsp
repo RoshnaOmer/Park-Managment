@@ -12,6 +12,9 @@
 <!DOCTYPE html>
 <html xmlns:h="http://xmlns.jcp.org/jsf/html" xmlns:f="http://xmlns.jcp.org/jsf/core">
     <head>
+        <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+        <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.2.1/jquery.min.js"></script>
+        <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"></script>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
         <title>Parking Management Info System</title>
         <style>
@@ -56,7 +59,7 @@
             <tbody>
                 <%
                     //if user exists!
-                    if (personDBUtil.CheckPerson(txtUserName, txtPassword, cbxRoles)&&request.getParameter("btnSubmit")=="Submit") {
+                    if (personDBUtil.CheckPerson(txtUserName, txtPassword, cbxRoles) && request.getParameter("btnSubmit") == "Submit") {
                         String userRole = myrole.showRole(cbxRoles);
                 %>
                 <tr>
@@ -64,7 +67,7 @@
                     <td><%=userRole%></td>
                     <td><%=txtUserName%></td>
                 </tr>
-                <% } else if(request.getParameter("btnSubmit")=="Submit") {
+                <% } else if (request.getParameter("btnSubmit") == "Submit") {
                     //TEST
                     response.sendRedirect("loginPage.jsp");
                 %>
@@ -72,28 +75,44 @@
                     <td style="color: red">ERROR!</td>
                 </tr>
                 <tr>
-                    <td><a href="loginPage.jsp">Go Back</a></td></tr><%}
-else{%>
+                    <td><a href="loginPage.jsp">Go Back</a></td></tr><%} else {%>
 
             </tbody>
-            <table border="0" cellpadding="1" width="50%">
 
-                <tbody>
-                    <tr>
-                        <td align=" center">
+            <div class="container">
+                
+                <div class="row">    <div class="col-sm-3">
+                        <form name="ShowPeopleForm" action="People.jsp" method=""><input class="button buttonPurple" type="submit" value="Show Registerd List" name="btnPeople"  />
+                        </form>
+                    </div>
+                    <div class="col-sm-3">
+                        <input class="button buttonGray" type="button" value="Show Cars List" name="btnCar" disabled="disabled"  />
+                    </div>
+                    <div class="col-sm-3"> 
+                        <input class="button buttonGray" type="button" value="Show Parked List" name="btnPark" disabled="disabled"  />
+                    </div>
+                    <div class="col-sm-3">      
+                        <input class="button buttonPurple" type="button" value="Show History List" name="btnHistory" disabled="disabled"  />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-sm-3">
+                        <form name="ShowPeopleForm" action="People.jsp" method=""><input class="button buttonPurple" type="submit" value="Show Registerd List" name="btnPeople"  />
+                        </form>
+                    </div>
+                    <div class="col-sm-3">
+                        <input class="button buttonGray" type="button" value="Show Cars List" name="btnCar" disabled="disabled"  />
+                    </div>
+                    <div class="col-sm-3"> 
+                        <input class="button buttonGray" type="button" value="Show Parked List" name="btnPark" disabled="disabled"  />
+                    </div>
+                    <div class="col-sm-3">      
+                        <input class="button buttonPurple" type="button" value="Show History List" name="btnHistory" disabled="disabled"  />
+                    </div>
+                </div>
+            </div>
 
-                            <form name="ShowPeopleForm" action="People.jsp" method=""><input class="button buttonPurple" type="submit" value="Show Registerd List" name="btnPeople"  />
-                            </form></td>
-                        <td align=" center"><input class="button buttonGray" type="button" value="Show Cars List" name="btnCar" disabled="disabled"  /></td>
-                    </tr>
-                    <tr>
-                        <td align=" center"><input class="button buttonGray" type="button" value="Show Parked List" name="btnPark" disabled="disabled"  /></td>
-                        <td align=" center"><input class="button buttonPurple" type="button" value="Show History List" name="btnHistory" disabled="disabled"  /></td>
-
-                    </tr>
-                </tbody>
-            </table>
-<%}%>
+            <%}%>
     </center>   
 </body>
 </html>

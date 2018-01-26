@@ -34,7 +34,6 @@ public class CarDBUtil {
 
         } catch (Exception e) {
             e.printStackTrace();
-
         }
     }
 
@@ -42,34 +41,37 @@ public class CarDBUtil {
         return rsMetaData;
     }
 
-    public ArrayList<Car> searchCar(String car_id) throws Exception {
+    public ArrayList<Car> searchCar(String car_model) {
         ArrayList<Car> list = new ArrayList<Car>();
 
         Statement myStmt = null;
-        ResultSet myRs = null;
+        ResultSet reset = null;
 
-        String query = "select * from table_cars where name like '%" + car_id + "%'";
+        String query = "select  car_id, car_model, car_color, car_licence_number, car_driver_foreign_id\n"
+                + "FROM         table_cars  where car_model like N'%" + car_model + "%'";
         try {
             myStmt = Conn.createStatement();
 
-            myRs = myStmt.executeQuery(query);
-            this.rsMetaData = myRs.getMetaData();
+            reset = myStmt.executeQuery(query);
+            this.rsMetaData = reset.getMetaData();
 
-            while (myRs.next()) {
-                Car tempCar = convertRowToCar(myRs);
+            while (reset.next()) {
+                Car tempCar = new Car(reset.getInt("car_id"), reset.getInt("car_driver_foreign_id"), reset.getString("car_color"), reset.getString("car_model"), reset.getString("car_licence_number"));
                 list.add(tempCar);
             }
 
             return list;
+        } catch (Exception exc) {
         } finally {
-            close(myStmt, myRs);
+            close(myStmt, reset);
         }
+        return null;
     }
 //==============================================================================
 
-    public int deleteCar(int theCar_id) throws Exception {
+    public int deleteCar(int theCar_id) {
 
-        int res;
+        int res = 0;
         Statement myStmt = null;
         ResultSet myRs = null;
 
@@ -77,6 +79,7 @@ public class CarDBUtil {
             myStmt = Conn.createStatement();
             res = myStmt.executeUpdate("delete from table_cars where car_id=" + String.valueOf(theCar_id));
 
+        } catch (Exception exc) {
         } finally {
             close(myStmt, myRs);
         }
@@ -84,27 +87,62 @@ public class CarDBUtil {
     }
 
     private void close(Statement myStmt, ResultSet myRs) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+        try {
+            if (myRs != null) {
+                myRs.close();
+            }
+            if (myStmt != null) {
+                myStmt.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    private Car convertRowToCar(ResultSet myRs) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
+    public int insertCar(Car theNewCar) {
 
-    public int insertCar(Car theNewCar) throws Exception {
-
-        int res;
+        int res = 0;
         Statement myStmt = null;
         ResultSet myRs = null;
         String query;
-        query = "insert into table_cars (car_color,car_model,car_license_number) values ('"
-                + theNewCar.getCar_color() + "','"
-                + theNewCar.getCar_model() + "',"
-                + String.valueOf(theNewCar.getCar_licence_number()) + ")";
+        query = "INSERT INTO [Roshna_Sara_CarParkingIMS].[dbo].[table_cars]\n"
+                + "           ([car_model]\n"
+                + "           ,[car_color]\n"
+                + "           ,[car_licence_number]\n"
+                + "           ,[car_driver_foreign_id])"
+                + " values ('" + theNewCar.getCar_model() + "'"
+                + ",'" + theNewCar.getCar_color() + "',"
+                + "'" + theNewCar.getCar_licence_number() + "',"
+                + theNewCar.getCar_driver_foreign_id() + " )";
         try {
             myStmt = Conn.createStatement();
             res = myStmt.executeUpdate(query);
 
+        } catch (Exception exc) {
+        } finally {
+            close(myStmt, myRs);
+        }
+        return res;
+    }
+
+    public int UpdateCar(Car theNewCar) {
+
+        int res = 0;
+        Statement myStmt = null;
+        ResultSet myRs = null;
+        String query;
+        query = "Update [Roshna_Sara_CarParkingIMS].[dbo].[table_cars]\n"
+                + "    set       [car_model]\n = '" + theNewCar.getCar_model() + "'"
+                + "           ,[car_color]= '" + theNewCar.getCar_color() + "'\n"
+                + "           ,[car_licence_number] ='" + theNewCar.getCar_licence_number() + "'\n"
+                + "           ,[car_driver_foreign_id]=" + theNewCar.getCar_driver_foreign_id()
+                + "\n WHERE       person_id='" + theNewCar.getCar_id() + "'\"; ";
+        try {
+            myStmt = Conn.createStatement();
+            res = myStmt.executeUpdate(query);
+
+        } catch (Exception exc) {
         } finally {
             close(myStmt, myRs);
         }
@@ -112,19 +150,18 @@ public class CarDBUtil {
     }
 //==============================================================================
 
-    public ArrayList<Car> getAllCars() {
+    public ArrayList<Car> getAllCars(String car_model) {
         ArrayList<Car> list = new ArrayList<Car>();
         Statement myStmt = null;
         ResultSet myRs = null;
         try {
             myStmt = Conn.createStatement();
-            myRs = myStmt.executeQuery("select * from table_cars");
+            myRs = myStmt.executeQuery("select * from table_cars where car_model like N'%" + car_model + "%'");
             this.rsMetaData = myRs.getMetaData();
             while (myRs.next()) {
-                Car tempCar = new Car(myRs.getInt("car_driver_foreign_id"), myRs.getString("car_color"), myRs.getString("car_model"), myRs.getString("car_licence_number"));
+                Car tempCar = new Car(myRs.getInt("car_id"), myRs.getInt("car_driver_foreign_id"), myRs.getString("car_color"), myRs.getString("car_model"), myRs.getString("car_licence_number"));
                 list.add(tempCar);
             }
-
             return list;
         } catch (Exception exce) {
         } finally {

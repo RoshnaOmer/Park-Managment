@@ -49,11 +49,11 @@
                     </tr>
                     <tr>
                         <td>User Name: </td>
-                        <td><input type="text" name="txtUserName" value="" size="50" /></td>
+                        <td><input type="text" name="txtUserName" placeholder="Enter Username" value="" size="50" /></td>
                     </tr>
                     <tr>
                         <td>Password: </td>
-                        <td><input type="password" name="txtPassword" value="" size="50" /></td>
+                        <td><input type="password" name="txtPassword" placeholder="Enter password" value="" size="50" /></td>
                     </tr>
                 </tbody>
             </table>

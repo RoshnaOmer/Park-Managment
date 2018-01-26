@@ -24,7 +24,8 @@
                 window.open("Index.jsp");
 
             }
-        </script><style>
+        </script>
+        <style>
             .fullScreen
             {
                 position:fixed;
@@ -74,7 +75,7 @@
         </style>
         <title>People</title>
     </head>
-    <body >
+    <body>
         <div class="fullScreen">
             <a href="loginPage.jsp">Logout</a>
             <a href="MainMenu.jsp">Go to Menu</a>
@@ -216,8 +217,8 @@
                         <td class="td1"><input type="text" name="txtPersonEmail" value="<%=onePerson.getPerson_email()%>" width="50"/></td>
                         <td class="td1"><input type="text" name="txtPersonPhoneNo" value="<%=onePerson.getPerson_phone_no()%>" width="50"/></td>
                         <td class="td1"><input type="date" name="txtPersonBirthday" value="<%=onePerson.getPerson_birthday()%>" width="50"/></td>
-                        <td class="td1"><select name="cbxRoles">
-                                <option>---Select---</option>
+                        <td class="td1"><select name="cbxRoles" required>
+                                <option  value="">---Select---</option>
                                 <option value="1">Staff</option>
                                 <option value="2">Driver</option>
                                 <option value="2">Not Set</option>
