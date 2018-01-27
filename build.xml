@@ -7,8 +7,8 @@
 <!-- the Compile on Save feature is turned off for the project. -->
 <!-- You can turn off the Compile on Save (or Deploy on Save) setting -->
 <!-- in the project's Project Properties dialog box.-->
-<project name="FormsWebApplication" default="default" basedir=".">
-    <description>Builds, tests, and runs the project FormsWebApplication.</description>
+<project name="Park_Managment" default="default" basedir=".">
+    <description>Builds, tests, and runs the project Park_Managment.</description>
     <import file="nbproject/build-impl.xml"/>
     <!--
 

@@ -137,7 +137,7 @@ public class CarDBUtil {
                 + "           ,[car_color]= '" + theNewCar.getCar_color() + "'\n"
                 + "           ,[car_licence_number] ='" + theNewCar.getCar_licence_number() + "'\n"
                 + "           ,[car_driver_foreign_id]=" + theNewCar.getCar_driver_foreign_id()
-                + "\n WHERE       person_id='" + theNewCar.getCar_id() + "'\"; ";
+                + "\n WHERE       car_id=" + theNewCar.getCar_id();
         try {
             myStmt = Conn.createStatement();
             res = myStmt.executeUpdate(query);
@@ -150,13 +150,17 @@ public class CarDBUtil {
     }
 //==============================================================================
 
-    public ArrayList<Car> getAllCars(String car_model) {
+    public ArrayList<Car> getAllCars(String car_model, int carID) {
         ArrayList<Car> list = new ArrayList<Car>();
         Statement myStmt = null;
         ResultSet myRs = null;
         try {
             myStmt = Conn.createStatement();
-            myRs = myStmt.executeQuery("select * from table_cars where car_model like N'%" + car_model + "%'");
+            String q = "select * from table_cars where car_model like N'%" + car_model + "%'";
+            if (carID != 0) {
+                q += "and car_id=" + carID;
+            }
+            myRs = myStmt.executeQuery(q);
             this.rsMetaData = myRs.getMetaData();
             while (myRs.next()) {
                 Car tempCar = new Car(myRs.getInt("car_id"), myRs.getInt("car_driver_foreign_id"), myRs.getString("car_color"), myRs.getString("car_model"), myRs.getString("car_licence_number"));

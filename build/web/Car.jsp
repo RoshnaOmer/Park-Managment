@@ -25,7 +25,8 @@
                 window.open("NewCar.jsp");
 
             }
-        </script><style>
+        </script>
+        <style>
             .fullScreen
             {
                 position:fixed;
@@ -83,7 +84,9 @@
                 <input type="submit" class="button buttonPurple" onclick="RegisterNew()" value="Add New" /> 
 
                 <input type="submit" class="button buttonGray" value="Print" onclick="printPage()" />
-            </form><center><h1>Car List </h1>
+            </form>
+            <center>
+                <h1>Car List </h1>
                 <form name="SearchForm" action="Car.jsp" method="">
                     <table >
                         <tr>
@@ -104,15 +107,15 @@
                             <th>License N</th>
                             <th>Color</th>
                             <th>Owner</th>
-                            <th>Phone No</th>
-                            
-                                <%//if authorized then%>
+
+                            <%//if authorized then%>
                             <th>Edit</th>
                             <th>Delete</th>
                         </tr>
                     </thead>
                     <tbody>
-                        <%
+                        <%                            
+                            PersonDBUtil personDBUtil = new PersonDBUtil();
                             CarDBUtil carDBUtil;
                             carDBUtil = new CarDBUtil();
                             boolean canEdit = false;
@@ -127,12 +130,12 @@
 
                                 String txtCar_model = request.getParameter("txtCar_model");
                                 String txtCar_licence_number = request.getParameter("txtCar_licence_number");
-                                String txtCar_color = request.getParameter("txtCar_color");
-                                int txtCar_driver_foreign_id = Integer.getInteger(request.getParameter("txtCar_driver_foreign_id"));
+                                String txtCar_color = request.getParameter("cbxColor");
+                                int txtCar_driver_foreign_id = Integer.parseInt(request.getParameter("cbxOwner"));
 
                                 Car newCar = new Car(UpdateID, txtCar_driver_foreign_id, txtCar_color, txtCar_model, txtCar_licence_number);
 
-//                                carDBUtil.UpdateCar(newCar);
+                                carDBUtil.UpdateCar(newCar);
                             }
 
                             //DELETE
@@ -142,8 +145,8 @@
                             }
                             //SEARCH
                             String key = request.getParameter("txtKeyword") == null ? "" : request.getParameter("txtKeyword");
-                           
-                            List<Car> allCars = carDBUtil.getAllCars(key);
+
+                            List<Car> allCars = carDBUtil.getAllCars(key,0);
 
                             for (Car oneCar : allCars) {
                         %>
@@ -153,7 +156,11 @@
                             <td class="td1"><%=oneCar.getCar_model()%></td>
                             <td class="td1"><%=oneCar.getCar_licence_number()%></td>
                             <td class="td1"><%=oneCar.getCar_color()%></td>
-                            <td class="td1"><%=oneCar.getCar_driver_foreign_id()%></td>
+                            <%List<Person> CarOwner = personDBUtil.getAllPeople("", "", oneCar.getCar_driver_foreign_id(),2);
+
+                                for (Person onePerson : CarOwner) {%>
+                            <td class="td1"><%=onePerson.getPerson_full_name()%></td>
+                            <%}%>
                             <!--Edit button-->
                             <td class="td1" align=" center">
                                 <form name="toEditForm" action="Car.jsp" method="">  
@@ -176,7 +183,7 @@
                         <td class="td1"><%=oneCar.getCar_id()%></td>
                         <td class="td1"><input type="text" name="txtCar_model" value="<%=oneCar.getCar_model()%>" width="50"/></td>
                         <td class="td1"><input type="text" name="txtCar_licence_number" value="<%=oneCar.getCar_licence_number()%>" width="50"/></td>
-                    <td>
+                        <td>
                             <select required name="cbxColor">
                                 <option  value="<%=oneCar.getCar_color()%>"><%=oneCar.getCar_color()%></option>
                                 <option value="Black">Black</option>
@@ -187,19 +194,18 @@
                             </select>
                         </td>
 <!--                        <td class="td1"><input type="text" name="txtCar_driver_foreign_id" value="<%=oneCar.getCar_driver_foreign_id()%>" width="50"/></td>-->
-  <td>
+                        <td>
                             <select required name="cbxOwner">
                                 <option  value="">---Select---</option>
-                                
-                                <%
-                            PersonDBUtil personDBUtil = new PersonDBUtil();
-                            List<Person> allPeople = personDBUtil.getAllPeople("", "", 0);
 
-                            for (Person onePerson : allPeople) { %>
+                                <%
+                                    List<Person> allPeople = personDBUtil.getAllPeople("", "", 0,2);
+
+                                    for (Person onePerson : allPeople) {%>
                                 <option value="<%=onePerson.getPerson_id()%>"><%=onePerson.getPerson_full_name()%></option>
-                                
-                    <%}
-                        %>
+
+                                <%}
+                                %>
                             </select>
                         </td>
                         <td class="td1" align=" center"> 

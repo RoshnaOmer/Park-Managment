@@ -1,9 +1,12 @@
 <%-- 
-    Document   : CarDisplay
-    Created on : Jan 25, 2018, 8:20:52 PM
+    Document   : ParkDisplay
+    Created on : Jan 26, 2018, 8:24:36 PM
     Author     : roshn
 --%>
 
+<%@page import="java.text.SimpleDateFormat"%>
+<%@page import="MyClasses.Park"%>
+<%@page import="MyClasses.ParkDBUtil"%>
 <%@page import="MyClasses.PersonDBUtil"%>
 <%@page import="java.util.List"%>
 <%@page import="MyClasses.Person"%>
@@ -38,50 +41,41 @@
     <center>
         <div class="fullScreen"> 
             <a href="loginPage.jsp">Logout</a>   
-            <h1>Car Added!</h1>
+            <h1>Park Added!</h1>
             <h4>this is your info</h4>
             <%
-                CarDBUtil newCarDBUtil;
-                newCarDBUtil = new CarDBUtil();
+                ParkDBUtil newParkDBUtil;
+                newParkDBUtil = new ParkDBUtil();
                 try {
-                    String txtCarModel = request.getParameter("txtCarModel");
-                    String cbxColor = request.getParameter("cbxColor");
-                    String txtCarLicenceNumber = request.getParameter("txtCarLicenceNumber");
-                    String cbxOwner = request.getParameter("cbxOwner");
+
+                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+                    String txtTime_form = request.getParameter("txtTime_form");
+                    String txtTime_to = request.getParameter("txtTime_to");
+                    int txtCar_foreign_id = Integer.parseInt(request.getParameter("cbxCar"));
+                    int txtStaff_foreign_id = Integer.parseInt(request.getParameter("cbxStaff"));
+                    int txtAmount_paid = Integer.parseInt(request.getParameter("txtAmountPaid"));
                     int owner = 0;
                     try {
                         owner = Integer.parseInt(cbxOwner);
                     } catch (Exception exc) {
                     }
                     if (owner != 0) {
-                        Car newCar = new Car(owner, cbxColor, txtCarModel, txtCarLicenceNumber);
-                        newCarDBUtil.insertCar(newCar);
+                        Park newPark = new Park(txtCar_foreign_id, txtStaff_foreign_id, sdf.parse(txtTime_form), sdf.parse(txtTime_to), txtAmount_paid);
+                        newParkDBUtil.insertPark(newPark);
 
             %>
             <table>
                 <tbody>
                     <tr>
-                        <td>Model </td>
-                        <td><%= txtCarModel%></td>
+                        <td>The car stayed for  </td>
+                            <td><%    long difference = sdf.parse(txtTime_form).getTime() - sdf.parse(txtTime_to).getTime();
+                                System.out.println((int) ((difference / (1000 * 60 * 60)) % 24));%></td>
                     </tr>
                     <tr>
-                        <td>Color </td>
-                        <td><%= cbxColor%></td>
-                    </tr>
-                    <tr>
-                        <td>Owner </td>
-                        <%
-                            PersonDBUtil personDBUtil = new PersonDBUtil();
-                            List<Person> allPeople = personDBUtil.getAllPeople("", "", owner,0);
-                            for (Person onePerson : allPeople) {%>
-                        <td ><%=onePerson.getPerson_full_name()%></td>
-                        <%}%>
+                        <td>And paid </td>
+                        <td><%= txtAmount_paid%></td>
                     </tr>
 
-                    <tr>
-                        <td>License Number: </td>
-                        <td><%= txtCarLicenceNumber%></td>
-                    </tr>
                 </tbody>
             </table><%} else {%><td><%="Error!"%></td>
             <%}

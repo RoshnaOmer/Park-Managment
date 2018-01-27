@@ -80,34 +80,28 @@
             </tbody>
 
             <div class="container">
-                
-                <div class="row">    <div class="col-sm-3">
-                        <form name="ShowPeopleForm" action="People.jsp" method=""><input class="button buttonPurple" type="submit" value="Show Registerd List" name="btnPeople"  />
-                        </form>
-                    </div>
-                    <div class="col-sm-3">
-                        <input class="button buttonGray" type="button" value="Show Cars List" name="btnCar" disabled="disabled"  />
-                    </div>
-                    <div class="col-sm-3"> 
-                        <input class="button buttonGray" type="button" value="Show Parked List" name="btnPark" disabled="disabled"  />
-                    </div>
-                    <div class="col-sm-3">      
-                        <input class="button buttonPurple" type="button" value="Show History List" name="btnHistory" disabled="disabled"  />
-                    </div>
-                </div>
+
                 <div class="row">
                     <div class="col-sm-3">
-                        <form name="ShowPeopleForm" action="People.jsp" method=""><input class="button buttonPurple" type="submit" value="Show Registerd List" name="btnPeople"  />
+                        <form name="ShowPeopleForm" action="People.jsp" method="">
+                            <input class="button buttonPurple" type="submit" value="Show Registerd List" name="btnPeople"  />
                         </form>
                     </div>
                     <div class="col-sm-3">
-                        <input class="button buttonGray" type="button" value="Show Cars List" name="btnCar" disabled="disabled"  />
+                        <form name="ShowCarForm" action="Car.jsp" method="">
+                            <input class="button buttonGray" type="submit" value="Show Cars List" name="btnCar" />         
+                        </form>
+                    </div>
+
+                    <div class="col-sm-3"> 
+                        <form name="ShowParkForm" action="Park.jsp" method="">
+                            <input class="button buttonGray" type="submit" value="userRole=1" name="btnPark"/>
+                        </form>
                     </div>
                     <div class="col-sm-3"> 
-                        <input class="button buttonGray" type="button" value="Show Parked List" name="btnPark" disabled="disabled"  />
-                    </div>
-                    <div class="col-sm-3">      
-                        <input class="button buttonPurple" type="button" value="Show History List" name="btnHistory" disabled="disabled"  />
+                        <form name="ShowHistoryForm" action="Park.jsp" method="">     
+                            <input class="button buttonPurple" type="submit" value="userRole=2" name="btnHistory"/>
+                        </form>
                     </div>
                 </div>
             </div>

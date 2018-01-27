@@ -14,7 +14,7 @@ import java.util.ArrayList;
 import java.util.Properties;
 
 public class ParkDBUtil {
-    
+
     private Connection Conn;
     private ResultSetMetaData rsMetaData;
     private Object dbHelper;
@@ -46,13 +46,13 @@ public class ParkDBUtil {
         return rsMetaData;
     }
 
-    public ArrayList<Car> searchCar(String car_id) throws Exception {
-        ArrayList<Car> list = new ArrayList<Car>();
+    public ArrayList<Park> searchPark(String park_id) throws Exception {
+        ArrayList<Park> list = new ArrayList<Park>();
 
         Statement myStmt = null;
         ResultSet myRs = null;
 
-        String query = "select * from table_park where name like '%" + car_id + "%'";
+        String query = "select * from table_park where name like '%" + park_id + "%'";
         try {
             myStmt = Conn.createStatement();
 
@@ -60,8 +60,9 @@ public class ParkDBUtil {
             this.rsMetaData = myRs.getMetaData();
 
             while (myRs.next()) {
-                Car tempCar = convertRowToCar(myRs);
-                list.add(tempCar);
+                Park tempPark = new Park(myRs.getInt("park_id"), myRs.getInt("car_foreign_id"), myRs.getInt("staff_foreign_id"),
+                        myRs.getDate("time_form"), myRs.getDate("time_to"), myRs.getDate("created_on"), myRs.getDouble("amount_paid"));
+                list.add(tempPark);
             }
 
             return list;
@@ -71,7 +72,7 @@ public class ParkDBUtil {
     }
 //==============================================================================
 
-    public int deleteCar(int theCar_id) throws Exception {
+    public int deletePark(int thePark_id) throws Exception {
 
         int res;
         Statement myStmt = null;
@@ -79,7 +80,7 @@ public class ParkDBUtil {
 
         try {
             myStmt = Conn.createStatement();
-            res = myStmt.executeUpdate("delete from table_cars where car_id=" + String.valueOf(theCar_id));
+            res = myStmt.executeUpdate("delete from table_park where park_id=" + String.valueOf(thePark_id));
 
         } finally {
             close(myStmt, myRs);
@@ -88,23 +89,40 @@ public class ParkDBUtil {
     }
 
     private void close(Statement myStmt, ResultSet myRs) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
+
+        try {
+            if (myRs != null) {
+                myRs.close();
+            }
+            if (myStmt != null) {
+                myStmt.close();
+            }
+        } catch (Exception e) {
+            e.printStackTrace();
+        }
     }
 
-    private Car convertRowToCar(ResultSet myRs) {
-        throw new UnsupportedOperationException("Not supported yet."); //To change body of generated methods, choose Tools | Templates.
-    }
-
-    public int insertCar(Car theNewCar) throws Exception {
+    public int insertPark(Park theNewPark) throws Exception {
 
         int res;
         Statement myStmt = null;
         ResultSet myRs = null;
         String query;
-        query = "insert into table_cars (car_color,car_model,car_license_number) values ('"
-                + theNewCar.getCar_color() + "','"
-                + theNewCar.getCar_model() + "',"
-                + String.valueOf(theNewCar.getCar_licence_number()) + ")";
+        query = "INSERT INTO [Roshna_Sara_CarParkingIMS].[dbo].[table_park]\n"
+                + "           ([car_foreign_id]\n"
+                + "           ,[staff_foreign_id]\n"
+                + "           ,[time_from]\n"
+                + "           ,[time_to]\n"
+                + "           ,[created_on]\n"
+                + "           ,[amount_paid])\n"
+                + "     VALUES\n"
+                + "           ("
+                + theNewPark.getCar_foreign_id() + ","
+                + theNewPark.getStaff_foreign_id() + ",'"
+                + String.valueOf(theNewPark.getTime_form()) + "','"
+                + String.valueOf(theNewPark.getTime_to()) + "','"
+                + String.valueOf(theNewPark.getCreated_on()) + "',"
+                + theNewPark.getAmount_paid() + ")";
         try {
             myStmt = Conn.createStatement();
             res = myStmt.executeUpdate(query);
@@ -116,17 +134,50 @@ public class ParkDBUtil {
     }
 //==============================================================================
 
-    public ArrayList<Car> getAllCars() {
-        ArrayList<Car> list = new ArrayList<Car>();
+    public int UpdatePark(Park theNewPark) {
+
+        int res = 0;
+        Statement myStmt = null;
+        ResultSet myRs = null;
+        String query;
+        query = "UPDATE [Roshna_Sara_CarParkingIMS].[dbo].[table_park]\n"
+                + "   SET [car_foreign_id] = " + theNewPark.getCar_foreign_id()
+                + "      ,[staff_foreign_id] = " + theNewPark.getStaff_foreign_id()
+                + "      ,[time_from] = '" + theNewPark.getTime_form() + "'\n"
+                + "      ,[time_to] = '" + theNewPark.getTime_to() + "'\n"
+                + "      ,[created_on] = getdate()\n"
+                + "      ,[amount_paid] = " + theNewPark.getAmount_paid()
+                + "\n WHERE       park_id=" + theNewPark.getPark_id();
+
+        try {
+            myStmt = Conn.createStatement();
+            res = myStmt.executeUpdate(query);
+
+        } catch (Exception exc) {
+        } finally {
+            close(myStmt, myRs);
+        }
+        return res;
+    }
+//==============================================================================
+
+    public ArrayList<Park> getAllParks(String key) {
+        ArrayList<Park> list = new ArrayList<Park>();
         Statement myStmt = null;
         ResultSet myRs = null;
         try {
             myStmt = Conn.createStatement();
-            myRs = myStmt.executeQuery("select * from table_cars");
+            String q = "select * from table_park ";
+            if (!key.equals("0")) {
+                q = "where park_id=" + key;
+            }
+            myRs = myStmt.executeQuery(q);
             this.rsMetaData = myRs.getMetaData();
             while (myRs.next()) {
-                Car tempCar = new Car(myRs.getInt("car_driver_foreign_id"), myRs.getString("car_color"), myRs.getString("car_model"), myRs.getString("car_licence_number"));
-                list.add(tempCar);
+
+                Park tempPark = new Park(myRs.getInt("park_id"), myRs.getInt("car_foreign_id"), myRs.getInt("staff_foreign_id"),
+                        myRs.getDate("time_form"), myRs.getDate("time_to"), myRs.getDate("created_on"), myRs.getDouble("amount_paid"));
+                list.add(tempPark);
             }
 
             return list;
@@ -136,5 +187,5 @@ public class ParkDBUtil {
         }
         return null;
     }
-    
+
 }

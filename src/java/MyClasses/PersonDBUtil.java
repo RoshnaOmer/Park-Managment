@@ -29,7 +29,7 @@ public class PersonDBUtil {
             Class.forName(driver).newInstance();
             //------------------------------
             // get db properties
-            Properties props = new Properties();
+//            Properties props = new Properties();
 //            props.load(new FileInputStream("MyDBParams.txt"));
 //
 //            String user = props.getProperty("user");
@@ -37,6 +37,7 @@ public class PersonDBUtil {
 //            String dburl = props.getProperty("dburl");
 
             // connect to database
+//            myConn = DriverManager.getConnection(dburl, user, password);
             myConn = DriverManager.getConnection("jdbc:jtds:sqlserver://127.0.01:1433/Roshna_Sara_CarParkingIMS", "sa", "rpcP@ssword");
             //----------------------
 
@@ -50,7 +51,7 @@ public class PersonDBUtil {
         return rsMetaData;
     }
 
-    public List<Person> getAllPeople(String keyword, String PhoneN, int ID) {
+    public List<Person> getAllPeople(String keyword, String PhoneN, int ID,int roleID) {
         ResultSet reset = null;
 
         List<Person> PersonList = new ArrayList<>();
@@ -62,6 +63,9 @@ public class PersonDBUtil {
                         + "WHERE     (person_full_name LIKE N'%" + keyword + "%' ) and ( person_phone_no like N'%" + PhoneN + "%')";
                 if (ID != 0) {
                     q += " and (( person_id =" + ID + "))";
+                }
+                if (roleID != 0) {
+                    q += " and (( role_foreign_id =" + roleID + "))";
                 }
                 reset = stmt.executeQuery(q);
                 

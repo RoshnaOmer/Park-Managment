@@ -177,7 +177,7 @@
                             String phoneN = request.getParameter("txtPhone") == null ? "" : request.getParameter("txtPhone");
                             int personID = request.getParameter("txtID") == null || request.getParameter("txtID") == "" ? 0 : Integer.parseInt(request.getParameter("txtID"));
 
-                            List<Person> allPeople = personDBUtil.getAllPeople(key, phoneN, personID);
+                            List<Person> allPeople = personDBUtil.getAllPeople(key, phoneN, personID,0);
 
                             for (Person onePerson : allPeople) {
                         %>
