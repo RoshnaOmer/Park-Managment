@@ -41,7 +41,8 @@
         </style>
     </head>
     <body style="background-image: url(Images/website_background.jpg);background-repeat: no-repeat;background-size: 100%;" >
-        <% PersonDBUtil personDBUtil;
+        <%
+            PersonDBUtil personDBUtil;
             personDBUtil = new PersonDBUtil();
             String txtUserName = request.getParameter("txtUserName");
             String txtPassword = request.getParameter("txtPassword");
@@ -59,29 +60,22 @@
             <tbody>
                 <%
                     //if user exists!
-                    if (personDBUtil.CheckPerson(txtUserName, txtPassword, cbxRoles) && request.getParameter("btnSubmit") == "Submit") {
+                    int personID = personDBUtil.CheckPerson(txtUserName, txtPassword, cbxRoles);
+                    if (personID != 0 && request.getParameter("btnSubmit").equals("Submit")) {
                         String userRole = myrole.showRole(cbxRoles);
                 %>
-                <tr>
-                    <td>Welcome, </td>
-                    <td><%=userRole%></td>
-                    <td><%=txtUserName%></td>
-                </tr>
-                <% } else if (request.getParameter("btnSubmit") == "Submit") {
-                    //TEST
-                    response.sendRedirect("loginPage.jsp");
-                %>
-                <tr>
-                    <td style="color: red">ERROR!</td>
-                </tr>
-                <tr>
-                    <td><a href="loginPage.jsp">Go Back</a></td></tr><%} else {%>
-
-            </tbody>
 
             <div class="container">
 
                 <div class="row">
+                    <div class="col-sm-12">Welcome,  <%=userRole%> : <%=txtUserName%></div>
+                </div>
+            </div>
+
+            <div class="container">
+
+                <div class="row">
+                    <%if (cbxRoles == 1) {%>
                     <div class="col-sm-3">
                         <form name="ShowPeopleForm" action="People.jsp" method="">
                             <input class="button buttonPurple" type="submit" value="Show Registerd List" name="btnPeople"  />
@@ -95,18 +89,31 @@
 
                     <div class="col-sm-3"> 
                         <form name="ShowParkForm" action="Park.jsp" method="">
-                            <input class="button buttonGray" type="submit" value="userRole=1" name="btnPark"/>
+                            <input class="button buttonGray" type="submit" value="Show Park list" name="btnPark"/>
+                            <input class="button buttonGray" type="submit" style="display:none"  value="1" name="userRole"/>
+                            
                         </form>
-                    </div>
+                    </div>                    
+                    <%} else {%>
                     <div class="col-sm-3"> 
                         <form name="ShowHistoryForm" action="Park.jsp" method="">     
-                            <input class="button buttonPurple" type="submit" value="userRole=2" name="btnHistory"/>
+                            <input class="button buttonPurple" type="submit" value="Show my History" name="btnHistory" />
+                            <input class="button buttonGray" type="text" style="display:none"  value="2" name="userRole"/>
+                            <input class="button buttonGray" type="text" style="display:none"  value="<%=personID%>" name="personID"/>
                         </form>
-                    </div>
+                    </div><%}%>
                 </div>
             </div>
 
-            <%}%>
+            <%} else  {
+                //TEST
+                response.sendRedirect("loginPage.jsp");
+            %>
+            <tr>
+                <td style="color: red">ERROR!</td>
+            </tr>
+            <tr>
+                <td><a href="loginPage.jsp">Go Back</a></td></tr><%}%>
     </center>   
 </body>
 </html>

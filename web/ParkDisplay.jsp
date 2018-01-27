@@ -4,6 +4,7 @@
     Author     : roshn
 --%>
 
+<%@page import="java.util.Date"%>
 <%@page import="java.text.SimpleDateFormat"%>
 <%@page import="MyClasses.Park"%>
 <%@page import="MyClasses.ParkDBUtil"%>
@@ -47,29 +48,30 @@
                 ParkDBUtil newParkDBUtil;
                 newParkDBUtil = new ParkDBUtil();
                 try {
+                    final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+                    final SimpleDateFormat sdformatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
-                    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                    String txtTime_form = request.getParameter("txtTime_form");
-                    String txtTime_to = request.getParameter("txtTime_to");
+                    Date txtTime_form = sdf.parse(request.getParameter("txtDateFrom"));
+                    Date txtTime_to = sdf.parse(request.getParameter("txtDateTo"));
                     int txtCar_foreign_id = Integer.parseInt(request.getParameter("cbxCar"));
                     int txtStaff_foreign_id = Integer.parseInt(request.getParameter("cbxStaff"));
                     int txtAmount_paid = Integer.parseInt(request.getParameter("txtAmountPaid"));
                     int owner = 0;
-                    try {
-                        owner = Integer.parseInt(cbxOwner);
-                    } catch (Exception exc) {
-                    }
-                    if (owner != 0) {
-                        Park newPark = new Park(txtCar_foreign_id, txtStaff_foreign_id, sdf.parse(txtTime_form), sdf.parse(txtTime_to), txtAmount_paid);
-                        newParkDBUtil.insertPark(newPark);
 
+                    if (txtStaff_foreign_id != 0) {
+                        try {
+                            Park newPark = new Park(txtCar_foreign_id, txtStaff_foreign_id, sdformatter.format(txtTime_form), sdformatter.format(txtTime_to), txtAmount_paid);
+                            newParkDBUtil.insertPark(newPark);
+                        } catch (Exception exc) {
+                            out.println(exc.getMessage());
+                        }
             %>
             <table>
                 <tbody>
                     <tr>
                         <td>The car stayed for  </td>
-                            <td><%    long difference = sdf.parse(txtTime_form).getTime() - sdf.parse(txtTime_to).getTime();
-                                System.out.println((int) ((difference / (1000 * 60 * 60)) % 24));%></td>
+                        <td><%    long difference = txtTime_to.getTime()-txtTime_form.getTime();
+                                out.println(((int) ((difference / (1000 * 60 * 60)) % 24))+" Hours");%></td>
                     </tr>
                     <tr>
                         <td>And paid </td>
@@ -80,6 +82,7 @@
             </table><%} else {%><td><%="Error!"%></td>
             <%}
                 } catch (Exception exc) {
+                    out.println(exc.getMessage());
                 }%>
         </div></center>
 </body>

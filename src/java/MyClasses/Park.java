@@ -11,13 +11,13 @@ import net.sourceforge.jtds.jdbc.DateTime;
 
 public class Park {
 
-    SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+    final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
 
     private int park_id, car_foreign_id, staff_foreign_id;
-    private Date time_form, time_to, created_on;
+    private String time_form, time_to, created_on;
     private double amount_paid;
 
-    public Park(int park_id, int car_foreign_id, int staff_foreign_id, Date created_on, Date time_form, Date time_to, double amount_paid) {
+    public Park(int park_id, int car_foreign_id, int staff_foreign_id, String created_on, String time_form, String time_to, double amount_paid) {
         this.park_id = park_id;
         this.car_foreign_id = car_foreign_id;
         this.staff_foreign_id = staff_foreign_id;
@@ -27,32 +27,32 @@ public class Park {
         this.amount_paid = amount_paid;
     }
 
-    public Park(int park_id, int car_foreign_id, int staff_foreign_id, Date time_form, Date time_to, double amount_paid) {
+    public Park(int park_id, int car_foreign_id, int staff_foreign_id, String time_form, String time_to, double amount_paid) {
         this.park_id = park_id;
         this.car_foreign_id = car_foreign_id;
         this.staff_foreign_id = staff_foreign_id;
         this.time_form = time_form;
         this.time_to = time_to;
         Date date = new Date();
-        this.created_on = date;
+        this.created_on = sdf.format(date);
         this.amount_paid = amount_paid;
     }
 
-    public Park(int car_foreign_id, int staff_foreign_id, Date time_form, Date time_to, double amount_paid) {
+    public Park(int car_foreign_id, int staff_foreign_id, String time_form, String time_to, double amount_paid) {
         this.car_foreign_id = car_foreign_id;
         this.staff_foreign_id = staff_foreign_id;
         this.time_form = time_form;
         this.time_to = time_to;
         Date date = new Date();
-        this.created_on = date;
+        this.created_on = sdf.format(date);
         this.amount_paid = amount_paid;
     }
 
-    public void setCreated_on(Date created_on) {
+    public void setCreated_on(String created_on) {
         this.created_on = created_on;
     }
 
-    public Date getCreated_on() {
+    public String getCreated_on() {
         return created_on;
     }
 
@@ -72,11 +72,11 @@ public class Park {
         return staff_foreign_id;
     }
 
-    public void setTime_to(Date time_to) {
+    public void setTime_to(String time_to) {
         this.time_to = time_to;
     }
 
-    public Date getTime_to() {
+    public String getTime_to() {
         return time_to;
     }
 
@@ -88,11 +88,11 @@ public class Park {
         return park_id;
     }
 
-    public void setTime_form(Date time_form) {
+    public void setTime_form(String time_form) {
         this.time_form = time_form;
     }
 
-    public Date getTime_form() {
+    public String getTime_form() {
         return time_form;
     }
 

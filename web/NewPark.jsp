@@ -73,7 +73,7 @@
                     </tr>
                     <tr>
                         <td>Model: *</td>
-                        <td> <select required name="cbxStaff">
+                        <td> <select required name="cbxCar">
                                 <option  value="">---Select---</option>
                                 <%CarDBUtil carDBUtil = new CarDBUtil();
                                     List<Car> allCars = carDBUtil.getAllCars("", 0);
@@ -99,7 +99,6 @@
 
                                     for (Person onePerson : allStaff) {%>
                                 <option value="<%=onePerson.getPerson_id()%>"><%=onePerson.getPerson_full_name()%></option>
-
                                 <%}
                                 %>
                             </select>

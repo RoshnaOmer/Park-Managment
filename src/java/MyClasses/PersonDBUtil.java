@@ -170,20 +170,20 @@ public class PersonDBUtil {
         return result;
     }
 
-    public boolean CheckPerson(String userName, String password, int role) {
+    public int CheckPerson(String userName, String password, int role) {
         if (myConn != null) {
             try {//TEST
                 Statement stmt = myConn.createStatement();
-                String qry = "SELECT     person_full_name, role_foreign_id \n"
+                String qry = "SELECT     person_id,person_full_name, role_foreign_id \n"
                         + "FROM         table_people \n"
                         + "WHERE     (person_username = N'" + userName + "')"
                         + " AND (person_password = N'" + password + "') AND (role_foreign_id = " + role + " )";
                 ResultSet rSet = stmt.executeQuery(qry);
                 while (rSet.next()) {
-                    return true;
+                    return rSet.getInt("person_id");
                 }
             } catch (Exception e) {
-                return false;
+                return 0;
             } finally {
                 try {
                     // conn.close();
@@ -192,7 +192,7 @@ public class PersonDBUtil {
                 }
             }
         }
-        return false;
+        return 0;
     }
 
     public int deletePerson(int person_id) {

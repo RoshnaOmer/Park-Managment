@@ -79,7 +79,7 @@
     <body >
         <div class="fullScreen">
             <a href="loginPage.jsp">Logout</a>
-            <a href="MainMenu.jsp">Go to Menu</a>
+            <a href="MainMenu.jsp"> </a>
             <form >
                 <input type="submit" class="button buttonPurple" onclick="RegisterNew()" value="Add New" /> 
 

@@ -10,6 +10,7 @@ import java.sql.DriverManager;
 import java.sql.ResultSet;
 import java.sql.ResultSetMetaData;
 import java.sql.Statement;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import java.util.Properties;
 
@@ -18,6 +19,7 @@ public class ParkDBUtil {
     private Connection Conn;
     private ResultSetMetaData rsMetaData;
     private Object dbHelper;
+    final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
 
     public ParkDBUtil() {
         String driver = "net.sourceforge.jtds.jdbc.Driver";
@@ -46,7 +48,7 @@ public class ParkDBUtil {
         return rsMetaData;
     }
 
-    public ArrayList<Park> searchPark(String park_id) throws Exception {
+    public ArrayList<Park> searchPark(String park_id) {
         ArrayList<Park> list = new ArrayList<Park>();
 
         Statement myStmt = null;
@@ -61,20 +63,22 @@ public class ParkDBUtil {
 
             while (myRs.next()) {
                 Park tempPark = new Park(myRs.getInt("park_id"), myRs.getInt("car_foreign_id"), myRs.getInt("staff_foreign_id"),
-                        myRs.getDate("time_form"), myRs.getDate("time_to"), myRs.getDate("created_on"), myRs.getDouble("amount_paid"));
+                        sdf.format(myRs.getDate("time_form")), sdf.format(myRs.getDate("time_to")), sdf.format(myRs.getDate("created_on")), myRs.getDouble("amount_paid"));
                 list.add(tempPark);
             }
 
             return list;
+        } catch (Exception exc) {
         } finally {
             close(myStmt, myRs);
         }
+        return null;
     }
 //==============================================================================
 
-    public int deletePark(int thePark_id) throws Exception {
+    public int deletePark(int thePark_id) {
 
-        int res;
+        int res = 0;
         Statement myStmt = null;
         ResultSet myRs = null;
 
@@ -82,6 +86,7 @@ public class ParkDBUtil {
             myStmt = Conn.createStatement();
             res = myStmt.executeUpdate("delete from table_park where park_id=" + String.valueOf(thePark_id));
 
+        } catch (Exception exc) {
         } finally {
             close(myStmt, myRs);
         }
@@ -102,9 +107,9 @@ public class ParkDBUtil {
         }
     }
 
-    public int insertPark(Park theNewPark) throws Exception {
+    public int insertPark(Park theNewPark) {
 
-        int res;
+        int res = 0;
         Statement myStmt = null;
         ResultSet myRs = null;
         String query;
@@ -119,14 +124,14 @@ public class ParkDBUtil {
                 + "           ("
                 + theNewPark.getCar_foreign_id() + ","
                 + theNewPark.getStaff_foreign_id() + ",'"
-                + String.valueOf(theNewPark.getTime_form()) + "','"
-                + String.valueOf(theNewPark.getTime_to()) + "','"
-                + String.valueOf(theNewPark.getCreated_on()) + "',"
+                + theNewPark.getTime_form() + "','"
+                + theNewPark.getTime_to() + "','"
+                + theNewPark.getCreated_on() + "',"
                 + theNewPark.getAmount_paid() + ")";
         try {
             myStmt = Conn.createStatement();
             res = myStmt.executeUpdate(query);
-
+        } catch (Exception exc) {
         } finally {
             close(myStmt, myRs);
         }
@@ -161,27 +166,46 @@ public class ParkDBUtil {
     }
 //==============================================================================
 
-    public ArrayList<Park> getAllParks(String key) {
+    public ArrayList<Park> getAllParks(String key, int role) {
         ArrayList<Park> list = new ArrayList<Park>();
         Statement myStmt = null;
         ResultSet myRs = null;
+        String q = "";
         try {
             myStmt = Conn.createStatement();
-            String q = "select * from table_park ";
-            if (!key.equals("0")) {
-                q = "where park_id=" + key;
+            if (role == 1) {
+                q = "select  park_id, car_foreign_id, staff_foreign_id, time_from, time_to, created_on, amount_paid from table_park ";
+                if (!key.equals("0")) {
+                    q += " where park_id= " + key;
+                }
+            } else if (role == 2) {
+                q = "SELECT     table_park.park_id, table_park.car_foreign_id, table_park.staff_foreign_id, table_park.time_from, table_park.time_to, table_park.created_on, table_park.amount_paid, \n"
+                        + "                      table_people.person_full_name AS Expr1, table_cars.car_model, table_people_1.person_full_name, table_people_1.role_foreign_id, table_people_1.person_id\n"
+                        + "FROM         table_park INNER JOIN\n"
+                        + "                      table_cars ON table_park.car_foreign_id = table_cars.car_id INNER JOIN\n"
+                        + "                      table_people ON table_park.staff_foreign_id = table_people.person_id INNER JOIN\n"
+                        + "                      table_people AS table_people_1 ON table_cars.car_driver_foreign_id = table_people_1.person_id\n"
+                        + "WHERE     (table_people_1.person_id = 4)";
+            } else {
+                return null;
             }
+
             myRs = myStmt.executeQuery(q);
             this.rsMetaData = myRs.getMetaData();
             while (myRs.next()) {
 
-                Park tempPark = new Park(myRs.getInt("park_id"), myRs.getInt("car_foreign_id"), myRs.getInt("staff_foreign_id"),
-                        myRs.getDate("time_form"), myRs.getDate("time_to"), myRs.getDate("created_on"), myRs.getDouble("amount_paid"));
+                Park tempPark = new Park(myRs.getInt("park_id"), myRs.getInt("car_foreign_id"),
+                        myRs.getInt("staff_foreign_id"),
+                        myRs.getString("created_on"),
+                        myRs.getString("time_from"),
+                        myRs.getString("time_to"),
+                        myRs.getDouble("amount_paid"));
                 list.add(tempPark);
             }
 
             return list;
         } catch (Exception exce) {
+
         } finally {
             close(myStmt, myRs);
         }

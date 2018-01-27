@@ -81,7 +81,7 @@
     <body >
         <div class="fullScreen">
             <a href="loginPage.jsp">Logout</a>
-            <a href="MainMenu.jsp">Go to Menu</a>
+            <a href="MainMenu.jsp"> </a>
             <form >
                 <input type="submit" class="button buttonPurple" onclick="RegisterNew()" value="Add New" /> 
 
@@ -92,7 +92,7 @@
                 <form name="SearchForm" action="Park.jsp" method="">
                     <table >
                         <tr>
-                            <td colspan="1">Car</td>
+                            <td colspan="1">ID</td>
                             <td colspan="7"><input type="text" name="txtKeyword"  size="50" />  </td>
                         </tr>
                         <tr>
@@ -107,7 +107,6 @@
                             <th>ID</th>
                             <th>Staff</th>
                             <th>Model</th>
-                            <th>Owner</th>
                             <th>From</th>
                             <th>To</th>
                             <th>Amount Paid</th>
@@ -117,7 +116,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        <%                            
+                        <%
                             PersonDBUtil personDBUtil = new PersonDBUtil();
                             CarDBUtil carDBUtil = new CarDBUtil();
                             ParkDBUtil parkDBUtil;
@@ -131,15 +130,18 @@
                             //UPDATE
                             int UpdateID = request.getParameter("txtUpdate") == null ? 0 : Integer.parseInt(request.getParameter("txtUpdate"));
                             if (UpdateID > 0) {
-                                SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
-                                String txtTime_form = request.getParameter("txtTime_form");
-                                String txtTime_to = request.getParameter("txtTime_to");
+
+                                final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm");
+                                final SimpleDateFormat sdformatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
+
+                                Date txtTime_form = sdf.parse(request.getParameter("txtTime_form"));
+                                Date txtTime_to = sdf.parse(request.getParameter("txtTime_to"));
                                 int txtCar_foreign_id = Integer.parseInt(request.getParameter("cbxCar"));
-                                int txtStaff_foreign_id = Integer.parseInt(request.getParameter("cbxStaff"));
-                                int txtAmount_paid = Integer.parseInt(request.getParameter("txtAmountPaid"));
+                                int txtStaff_foreign_id = (int) Double.parseDouble(request.getParameter("cbxStaff"));
+                                int txtAmount_paid = (int) Double.parseDouble(request.getParameter("txtAmountPaid"));
 
                                 Park newPark = new Park(UpdateID, txtCar_foreign_id, txtStaff_foreign_id,
-                                        sdf.parse(txtTime_form), sdf.parse(txtTime_to), new Date(), txtAmount_paid);
+                                        sdformatter.format(txtTime_form), sdformatter.format(txtTime_to), sdformatter.format(new Date()), txtAmount_paid);
 
                                 parkDBUtil.UpdatePark(newPark);
                             }
@@ -151,8 +153,15 @@
                             }
                             //SEARCH
                             String key = request.getParameter("txtKeyword") == null ? "0" : request.getParameter("txtKeyword");
+                            int userRole = 0;
+                            String personID = "0";
+                            try {
+                                userRole = Integer.parseInt(request.getParameter("userRole"));
+                                personID = request.getParameter("personID");
+                            } catch (Exception exc) {
+                            }
 
-                            List<Park> allParks = parkDBUtil.getAllParks(key);
+                            List<Park> allParks = parkDBUtil.getAllParks(personID, userRole);
 
                             for (Park onePark : allParks) {
                         %>
@@ -205,12 +214,13 @@
                         <td class="td1">
                             <select required name="cbxCar">
                                 <option  value="">---Select---</option>
-                                <%List<Car> allCars = carDBUtil.getAllCars("", onePark.getCar_foreign_id());
+                                <%
+                                    List<Car> allCars = carDBUtil.getAllCars("", onePark.getCar_foreign_id());
                                     for (Car oneCar : allCars) {%>
                                 <option value="<%=oneCar.getCar_id()%>" ><%=oneCar.getCar_model()%></option><%}%> </select>
                         </td>
-                        <td class="td1"><input type="datetime" name="txtTime_form" value="<%=onePark.getTime_form()%>" width="50"/></td>
-                        <td class="td1"><input type="datetime" name="txtTime_to" value="<%=onePark.getTime_to()%>" width="50"/></td>
+                        <td class="td1"><input type="datetime-local" name="txtTime_form" value="<%=onePark.getTime_form()%>" width="50"/></td>
+                        <td class="td1"><input type="datetime-local" name="txtTime_to" value="<%=onePark.getTime_to()%>" width="50"/></td>
                         <td class="td1"><input type="number" name="txtAmountPaid" value="<%=onePark.getAmount_paid()%>" width="50"/></td>
 
                         <td class="td1" align=" center"> 
@@ -219,6 +229,7 @@
                         </td>
                     </form></tr>
                     <%
+                            }
                         }%>
                     </tbody>
                 </table>

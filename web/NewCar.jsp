@@ -90,7 +90,7 @@
                                 
                                 <%
                             PersonDBUtil personDBUtil = new PersonDBUtil();
-                            List<Person> allPeople = personDBUtil.getAllPeople("", "", 0);
+                            List<Person> allPeople = personDBUtil.getAllPeople("", "", 0,2);
 
                             for (Person onePerson : allPeople) { %>
                                 <option value="<%=onePerson.getPerson_id()%>"><%=onePerson.getPerson_full_name()%></option>

@@ -78,7 +78,7 @@
     <body>
         <div class="fullScreen">
             <a href="loginPage.jsp">Logout</a>
-            <a href="MainMenu.jsp">Go to Menu</a>
+            <a href="MainMenu.jsp"> </a>
             <form >
                 <input type="submit" class="button buttonPurple" onclick="RegisterNew()" value="Register New" /> 
 
@@ -176,7 +176,7 @@
                             String key = request.getParameter("txtKeyword") == null ? "" : request.getParameter("txtKeyword");
                             String phoneN = request.getParameter("txtPhone") == null ? "" : request.getParameter("txtPhone");
                             int personID = request.getParameter("txtID") == null || request.getParameter("txtID") == "" ? 0 : Integer.parseInt(request.getParameter("txtID"));
-
+                         
                             List<Person> allPeople = personDBUtil.getAllPeople(key, phoneN, personID,0);
 
                             for (Person onePerson : allPeople) {
