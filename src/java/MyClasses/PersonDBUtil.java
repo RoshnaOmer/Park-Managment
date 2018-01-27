@@ -38,7 +38,7 @@ public class PersonDBUtil {
 
             // connect to database
 //            myConn = DriverManager.getConnection(dburl, user, password);
-            myConn = DriverManager.getConnection("jdbc:jtds:sqlserver://127.0.01:1433/Roshna_Sara_CarParkingIMS", "sa", "rpcP@ssword");
+            myConn = DriverManager.getConnection("jdbc:jtds:sqlserver://127.0.01:1433/Roshna_Sara_CarParkingIMS", "sa", "password");
             //----------------------
 
         } catch (Exception e) {
