@@ -108,6 +108,7 @@
             <input type="submit" class="button buttonPurple" value="Submit" name="btnSubmit" />  
         </form>
         <br><a href="Index.jsp">New Owner? Register them here</a>
-    </center>    
+    </center> 
+        <jsp:include page="Footer.jsp" />   
 </body>
 </html>

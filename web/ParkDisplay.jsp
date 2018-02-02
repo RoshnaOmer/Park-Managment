@@ -85,5 +85,6 @@
                     out.println(exc.getMessage());
                 }%>
         </div></center>
+        <jsp:include page="Footer.jsp" />
 </body>
 </html>

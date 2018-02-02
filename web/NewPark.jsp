@@ -112,6 +112,7 @@
             <input type="submit" class="button buttonPurple" value="Submit" name="btnSubmit" />  
         </form>
         <br><a href="NewCar.jsp">New Car? Register it here</a>
-    </center>    
+    </center>  
+        <jsp:include page="Footer.jsp" />  
 </body>
 </html>

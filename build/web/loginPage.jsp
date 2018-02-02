@@ -63,6 +63,7 @@
         </form>
         <br>
         <a href="Index.jsp">Not a Member? Register here</a>
-    </center>  
+    </center> 
+        <jsp:include page="Footer.jsp" /> 
 </body>
 </html>

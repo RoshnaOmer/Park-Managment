@@ -234,5 +234,6 @@
                 </table>
 
             </center></div>
+        <jsp:include page="Footer.jsp" />
     </body>
 </html>

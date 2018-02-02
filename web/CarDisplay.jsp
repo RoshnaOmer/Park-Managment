@@ -88,5 +88,6 @@
                 } catch (Exception exc) {
                 }%>
         </div></center>
+        <jsp:include page="Footer.jsp" />
 </body>
 </html>

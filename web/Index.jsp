@@ -83,6 +83,7 @@
             <input type="submit" class="button buttonPurple" value="Submit" name="btnSubmit" />  
         </form>
         <br><a href="loginPage.jsp">Already a Member? Login here</a>
-    </center>    
+    </center>  
+        <jsp:include page="Footer.jsp" />  
     </body>
 </html>

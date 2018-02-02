@@ -75,5 +75,6 @@
             <br>
             <a href="loginPage.jsp">Login Here</a>
         </div>
+        <jsp:include page="Footer.jsp" />
     </body>
 </html>

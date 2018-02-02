@@ -9,11 +9,21 @@
 <html>
     <head>
         <meta http-equiv="Content-Type" content="text/html; charset=UTF-8">
-        <title>JSP Page</title>
+     <style>
+.footer {
+   position: fixed;
+   left: 0;
+   bottom: 0;
+   width: 100%;
+   background-color: grey;
+   color: white;
+   text-align: center;
+}
+</style>
     </head>
     <body>
-       <div id=”footer”>
-made for UKH
+       <div class="footer">
+made by  & for me
 
 </div>
     </body>
