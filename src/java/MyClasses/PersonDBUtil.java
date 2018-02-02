@@ -25,20 +25,28 @@ public class PersonDBUtil {
 
     public PersonDBUtil() {
         String driver = "net.sourceforge.jtds.jdbc.Driver";
+        Properties prop = new Properties();
         try {
             Class.forName(driver).newInstance();
             //------------------------------
             // get db properties
-//            Properties props = new Properties();
-//            props.load(new FileInputStream("MyDBParams.txt"));
-//
-//            String user = props.getProperty("user");
-//            String password = props.getProperty("password");
-//            String dburl = props.getProperty("dburl");
+            Properties props = new Properties();
 
+           // FileInputStream fis = new FileInputStream("MyDBParams.txt");
+//            props.load(new FileInputStream("MyDBParams.txt"));
+
+            String user = props.getProperty("user");
+            String password = props.getProperty("password");
+            String dburl = props.getProperty("dburl");
+
+            // load from input stream
+           // prop.load(fis);
+
+            // print the properties list from System.out
+            //prop.list(System.out);
             // connect to database
-//            myConn = DriverManager.getConnection(dburl, user, password);
-            myConn = DriverManager.getConnection("jdbc:jtds:sqlserver://127.0.01:1433/Roshna_Sara_CarParkingIMS", "sa", "password");
+            //myConn = DriverManager.getConnection(dburl, user, password);
+             myConn = DriverManager.getConnection("jdbc:jtds:sqlserver://127.0.01:1433/Roshna_Sara_CarParkingIMS", "sa", "rpcP@ssword");
             //----------------------
 
         } catch (Exception e) {
@@ -51,7 +59,7 @@ public class PersonDBUtil {
         return rsMetaData;
     }
 
-    public List<Person> getAllPeople(String keyword, String PhoneN, int ID,int roleID) {
+    public List<Person> getAllPeople(String keyword, String PhoneN, int ID, int roleID) {
         ResultSet reset = null;
 
         List<Person> PersonList = new ArrayList<>();
@@ -68,7 +76,7 @@ public class PersonDBUtil {
                     q += " and (( role_foreign_id =" + roleID + "))";
                 }
                 reset = stmt.executeQuery(q);
-                
+
                 while (reset.next()) {
                     Person p = new Person(reset.getInt("person_id"), reset.getInt("role_foreign_id"), reset.getString("person_full_name"), reset.getString("person_email"),
                             reset.getString("person_username"), reset.getString("person_password"), reset.getString("person_phone_no"), reset.getDate("person_birthday"));

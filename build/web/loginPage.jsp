@@ -41,25 +41,25 @@
                 <tbody>
                     <tr>
                         <td>Role: </td>
-                        <td><select name="cbxRoles">
-                                <option>---Select---</option>
+                        <td><select name="cbxRoles" required>
+                                <option value="">---Select---</option>
                                 <option value="1">Staff</option>
                                 <option value="2">Driver</option>
                             </select></td>
                     </tr>
                     <tr>
                         <td>User Name: </td>
-                        <td><input type="text" name="txtUserName" placeholder="Enter Username" value="" size="50" /></td>
+                        <td><input type="text" name="txtUserName" placeholder="Enter Username"  required="true" value="" size="50" /></td>
                     </tr>
                     <tr>
                         <td>Password: </td>
-                        <td><input type="password" name="txtPassword" placeholder="Enter password" value="" size="50" /></td>
+                        <td><input type="password" name="txtPassword" placeholder="Enter password"  required="true" value="" size="50" /></td>
                     </tr>
                 </tbody>
             </table>
 
-            <input type="reset" class="button buttonGray" value="Clear" name="btnClear" />
-            <input type="submit" class="button buttonPurple" value="Submit" name="btnSubmit" />  
+            <input type="submit" class="button buttonPurple" value="Submit" name="btnSubmit" /> 
+            <input type="reset" class="button buttonGray" value="Clear" name="btnClear" /> 
         </form>
         <br>
         <a href="Index.jsp">Not a Member? Register here</a>

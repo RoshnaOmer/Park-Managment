@@ -41,79 +41,91 @@
         </style>
     </head>
     <body style="background-image: url(Images/website_background.jpg);background-repeat: no-repeat;background-size: 100%;" >
-        <%
-            PersonDBUtil personDBUtil;
-            personDBUtil = new PersonDBUtil();
-            String txtUserName = request.getParameter("txtUserName");
-            String txtPassword = request.getParameter("txtPassword");
-            int cbxRoles = 0;
-            try {
-                cbxRoles = Integer.parseInt(request.getParameter("cbxRoles"));
-            } catch (Exception exc) {
-            }
-            Role myrole = new Role();
-        %>
-    <center><h1>Car Parking </h1>
-        <h1>Information Management System</h1>
-        <table border="0">
 
-            <tbody>
-                <%
-                    //if user exists!
-                    int personID = personDBUtil.CheckPerson(txtUserName, txtPassword, cbxRoles);
-                    if (personID != 0 && request.getParameter("btnSubmit").equals("Submit")) {
-                        String userRole = myrole.showRole(cbxRoles);
-                %>
+        <jsp:include page="Header.jsp" />
 
-            <div class="container">
 
-                <div class="row">
-                    <div class="col-sm-12">Welcome,  <%=userRole%> : <%=txtUserName%></div>
-                </div>
-            </div>
-
-            <div class="container">
-
-                <div class="row">
-                    <%if (cbxRoles == 1) {%>
-                    <div class="col-sm-3">
-                        <form name="ShowPeopleForm" action="People.jsp" method="">
-                            <input class="button buttonPurple" type="submit" value="Show Registerd List" name="btnPeople"  />
-                        </form>
-                    </div>
-                    <div class="col-sm-3">
-                        <form name="ShowCarForm" action="Car.jsp" method="">
-                            <input class="button buttonGray" type="submit" value="Show Cars List" name="btnCar" />         
-                        </form>
-                    </div>
-
-                    <div class="col-sm-3"> 
-                        <form name="ShowParkForm" action="Park.jsp" method="">
-                            <input class="button buttonGray" type="submit" value="Show Park list" name="btnPark"/>
-                            <input class="button buttonGray" type="submit" style="display:none"  value="1" name="userRole"/>
-                            
-                        </form>
-                    </div>                    
-                    <%} else {%>
-                    <div class="col-sm-3"> 
-                        <form name="ShowHistoryForm" action="Park.jsp" method="">     
-                            <input class="button buttonPurple" type="submit" value="Show my History" name="btnHistory" />
-                            <input class="button buttonGray" type="text" style="display:none"  value="2" name="userRole"/>
-                            <input class="button buttonGray" type="text" style="display:none"  value="<%=personID%>" name="personID"/>
-                        </form>
-                    </div><%}%>
-                </div>
-            </div>
-
-            <%} else  {
-                //TEST
-                response.sendRedirect("loginPage.jsp");
+        <div>
+            <%
+                PersonDBUtil personDBUtil;
+                personDBUtil = new PersonDBUtil();
+                String txtUserName = request.getParameter("txtUserName");
+                String txtPassword = request.getParameter("txtPassword");
+                int cbxRoles = 0;
+                try {
+                    cbxRoles = Integer.parseInt(request.getParameter("cbxRoles"));
+                } catch (Exception exc) {
+                }
+                Role myrole = new Role();
             %>
-            <tr>
-                <td style="color: red">ERROR!</td>
-            </tr>
-            <tr>
-                <td><a href="loginPage.jsp">Go Back</a></td></tr><%}%>
-    </center>   
-</body>
+            <center><h1>Car Parking </h1>
+                <h1>Information Management System</h1>
+                <table border="0">
+
+                    <tbody>
+                        <%
+                            //if user exists!
+                            int personID = personDBUtil.CheckPerson(txtUserName, txtPassword, cbxRoles);
+                            if (personID != 0 && request.getParameter("btnSubmit").equals("Submit")) {
+                                session.setAttribute("username", txtUserName);
+                                session.setAttribute("password", txtPassword);
+                                session.setAttribute("role", cbxRoles);
+                                String userRole = myrole.showRole(cbxRoles);
+                        %>
+
+                    <div class="container">
+
+                        <div class="row">
+                            <div class="col-sm-12">Welcome,<%= session.getAttribute("role")%>  <%=userRole%> : <%=txtUserName%></div>
+                        </div>
+                    </div>
+
+                    <div class="container">
+
+                        <div class="row">
+                            <%if (cbxRoles == 1) {%>
+                            <div class="col-sm-3">
+                                <form name="ShowPeopleForm" action="People.jsp" method="">
+                                    <input class="button buttonPurple" type="submit" value="Show Registerd List" name="btnPeople"  />
+                                </form>
+                            </div>
+                            <div class="col-sm-3">
+                                <form name="ShowCarForm" action="Car.jsp" method="">
+                                    <input class="button buttonGray" type="submit" value="Show Cars List" name="btnCar" />         
+                                </form>
+                            </div>
+
+                            <div class="col-sm-3"> 
+                                <form name="ShowParkForm" action="Park.jsp" method="">
+                                    <input class="button buttonGray" type="submit" value="Show Park list" name="btnPark"/>
+                                    <input class="button buttonGray" type="submit" style="display:none"  value="1" name="userRole"/>
+
+                                </form>
+                            </div>                    
+                            <%} else {%>
+                            <div class="col-sm-3"> 
+                                <form name="ShowHistoryForm" action="Park.jsp" method="">     
+                                    <input class="button buttonPurple" type="submit" value="Show my History" name="btnHistory" />
+                                    <input class="button buttonGray" type="text" style="display:none"  value="2" name="userRole"/>
+                                    <input class="button buttonGray" type="text" style="display:none"  value="<%=personID%>" name="personID"/>
+                                </form>
+                            </div><%}%>
+                        </div>
+                    </div>
+
+                    <%} else {
+                        //TEST
+                        response.sendRedirect("loginPage.jsp");
+                    %>
+                    <tr>
+                        <td style="color: red">ERROR!</td>
+                    </tr>
+                    <tr>
+                        <td><a href="loginPage.jsp">Go Back</a></td></tr><%}%>
+            </center>
+        </div>
+
+        <jsp:include page="Footer.jsp" />
+
+    </body>
 </html>

@@ -79,9 +79,8 @@
         <title>Park</title>
     </head>
     <body >
-        <div class="fullScreen">
-            <a href="loginPage.jsp">Logout</a>
-            <a href="MainMenu.jsp"> </a>
+        <div class="fullScreen">             <jsp:include page="Header.jsp" />
+
             <form >
                 <input type="submit" class="button buttonPurple" onclick="RegisterNew()" value="Add New" /> 
 

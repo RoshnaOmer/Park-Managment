@@ -22,14 +22,15 @@ public class CarDBUtil {
             //------------------------------
             // get db properties
             Properties props = new Properties();
-//            props.load(new FileInputStream("MyDBParams.txt"));
-//
-//            String user = props.getProperty("user");
-//            String password = props.getProperty("password");
-//            String dburl = props.getProperty("dburl");
+            props.load(new FileInputStream("MyDBParams.txt"));
+
+            String user = props.getProperty("user");
+            String password = props.getProperty("password");
+            String dburl = props.getProperty("dburl");
 
             // connect to database
-            Conn = DriverManager.getConnection("jdbc:jtds:sqlserver://127.0.01:1433/Roshna_Sara_CarParkingIMS", "sa", "password");
+            Conn = DriverManager.getConnection(dburl, user, password);
+           // Conn = DriverManager.getConnection("jdbc:jtds:sqlserver://127.0.01:1433/Roshna_Sara_CarParkingIMS", "sa", "password");
             //----------------------
 
         } catch (Exception e) {
