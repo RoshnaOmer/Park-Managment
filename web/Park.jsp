@@ -80,13 +80,18 @@
     </head>
     <body >
         <%
+
+            PersonDBUtil personDBUtil = new PersonDBUtil();
+            String username = (String) session.getAttribute("username");
+            String password = (String) session.getAttribute("password");
+            String role = (String) session.getAttribute("role");
+            int intRole = 0;
             try {
-                PersonDBUtil personDBUtil = new PersonDBUtil();
-                String username = (String) session.getAttribute("username");
-                String password = (String) session.getAttribute("password");
-                String role = (String) session.getAttribute("role");
-                int currentpersonID = personDBUtil.CheckPerson(username, password, Integer.parseInt(role));
-                if (currentpersonID != 0) {%>
+                intRole = Integer.valueOf(role);
+            } catch (Exception exc) {
+            }
+            int currentpersonID = personDBUtil.CheckPerson(username, password, intRole);
+            if (currentpersonID != 0) {%>
         <div class="fullScreen">             <jsp:include page="Header.jsp" />
 
             <form >
@@ -162,14 +167,9 @@
                             //SEARCH
                             String key = request.getParameter("txtKeyword") == null ? "0" : request.getParameter("txtKeyword");
                             int userRole = 0;
-                            String personID = "0";
-                            try {
-                                userRole = Integer.parseInt(role);
-                                personID = request.getParameter("personID");
-                            } catch (Exception exc) {
-                            }
-
-                            List<Park> allParks = parkDBUtil.getAllParks(personID, userRole);
+                            userRole = Integer.parseInt(role);
+                              
+                            List<Park> allParks = parkDBUtil.getAllParks(key, userRole,currentpersonID);
 
                             for (Park onePark : allParks) {
                         %>
@@ -187,6 +187,8 @@
                             <td class="td1"><%=onePark.getTime_form()%></td>
                             <td class="td1"><%=onePark.getTime_to()%></td>
                             <td class="td1"><%=onePark.getAmount_paid()%></td>
+
+                            <!--check role-->
                             <%  if (role != null && role.equals("1")) {%>
 
                             <!--Edit button-->
@@ -236,8 +238,7 @@
                             <input type="text" name="txtUpdate" value="<%=onePark.getPark_id()%>" size="50" style="display:none" />
                             <input class="button " type="submit" value="btnUpdate"   />
                         </td>
-                    </form></tr><%}%>
-                    <%
+                    </form></tr><%}
                             }
                         }%>
                     </tbody>
@@ -245,11 +246,9 @@
 
             </center></div>
             <%
-                    } else
-                        response.sendRedirect("loginPage.jsp");
-                }catch (Exception exc) {
-                                response.sendRedirect("loginPage.jsp");
-                            }%>
+                } else
+                    response.sendRedirect("loginPage.jsp");
+            %>
             <jsp:include page="Footer.jsp" />
     </body>
 </html>

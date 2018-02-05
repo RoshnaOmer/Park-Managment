@@ -54,9 +54,13 @@
 
                     Date txtTime_form = sdf.parse(request.getParameter("txtDateFrom"));
                     Date txtTime_to = sdf.parse(request.getParameter("txtDateTo"));
+                    
+                        long difference = txtTime_to.getTime()-txtTime_form.getTime();
+                                double hrs = ((double) ((difference / (1000 * 60 * 60)) % 24));
                     int txtCar_foreign_id = Integer.parseInt(request.getParameter("cbxCar"));
                     int txtStaff_foreign_id = Integer.parseInt(request.getParameter("cbxStaff"));
-                    int txtAmount_paid = Integer.parseInt(request.getParameter("txtAmountPaid"));
+//                    Price, txtAmountPaid
+                    int txtAmount_paid = (int)hrs*1000;
                     int owner = 0;
 
                     if (txtStaff_foreign_id != 0) {
@@ -71,8 +75,7 @@
                 <tbody>
                     <tr>
                         <td>The car stayed for  </td>
-                        <td><%    long difference = txtTime_to.getTime()-txtTime_form.getTime();
-                                out.println(((int) ((difference / (1000 * 60 * 60)) % 24))+" Hours");%></td>
+                        <td><%out.println(hrs+" Hours");%></td>
                     </tr>
                     <tr>
                         <td>And paid </td>

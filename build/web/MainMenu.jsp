@@ -73,6 +73,7 @@
                                 if (request.getParameter("btnSubmit")!=null&&request.getParameter("btnSubmit").equals("Submit")) {
                                     session.setAttribute("username", txtUserName);
                                     session.setAttribute("password", txtPassword);
+                                    session.setAttribute("personid", personID);
                                     session.setAttribute("role", String.valueOf(cbxRoles));
                                 }
                                 String userRole = myrole.showRole(cbxRoles);

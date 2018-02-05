@@ -36,7 +36,7 @@ public class ParkDBUtil {
 //            String dburl = props.getProperty("dburl");
 
             // connect to database
-           // Conn = DriverManager.getConnection(dburl, user, password);
+            // Conn = DriverManager.getConnection(dburl, user, password);
             Conn = DriverManager.getConnection("jdbc:jtds:sqlserver://127.0.01:1433/Roshna_Sara_CarParkingIMS", "sa", "password");
             //----------------------
 
@@ -168,7 +168,7 @@ public class ParkDBUtil {
     }
 //==============================================================================
 
-    public ArrayList<Park> getAllParks(String key, int role) {
+    public ArrayList<Park> getAllParks(String key, int role, int currentpersonID) {
         ArrayList<Park> list = new ArrayList<Park>();
         Statement myStmt = null;
         ResultSet myRs = null;
@@ -177,7 +177,7 @@ public class ParkDBUtil {
             myStmt = Conn.createStatement();
             if (role == 1) {
                 q = "select  park_id, car_foreign_id, staff_foreign_id, time_from, time_to, created_on, amount_paid from table_park ";
-                if (!key.equals("0")) {
+                if (key != null && !key.equals("0")) {
                     q += " where park_id= " + key;
                 }
             } else if (role == 2) {
@@ -187,7 +187,7 @@ public class ParkDBUtil {
                         + "                      table_cars ON table_park.car_foreign_id = table_cars.car_id INNER JOIN\n"
                         + "                      table_people ON table_park.staff_foreign_id = table_people.person_id INNER JOIN\n"
                         + "                      table_people AS table_people_1 ON table_cars.car_driver_foreign_id = table_people_1.person_id\n"
-                        + "WHERE     (table_people_1.person_id = 4)";
+                        + "WHERE     (table_people_1.person_id = " + currentpersonID + " )";
             } else {
                 return null;
             }

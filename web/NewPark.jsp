@@ -83,12 +83,12 @@
                             </select>
                         </td>
                     </tr>
-                    <tr>
+<!--                    <tr>
                         <td>Amount Paid: *</td>
                         <td><input type="number" name="txtAmountPaid" required="true" value="" size="25" /></td>
-                    </tr>
+                    </tr>-->
                     <tr>
-                        <td>Owner: </td>
+                        <td>Staff: </td>
                         <td>
                             <select required name="cbxStaff">
                                 <option  value="">---Select---</option>
