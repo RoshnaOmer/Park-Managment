@@ -15,15 +15,15 @@
    left: 0;
    bottom: 0;
    width: 100%;
-   background-color: grey;
-   color: white;
+   background-color: #a1abb9;
+   color: #000000;
    text-align: center;
 }
 </style>
     </head>
     <body>
        <div class="footer">
-made by  & for me
+made by Roshna & Sara for UKH
 
 </div>
     </body>

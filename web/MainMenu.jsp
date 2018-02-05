@@ -41,23 +41,26 @@
         </style>
     </head>
     <body style="background-image: url(Images/website_background.jpg);background-repeat: no-repeat;background-size: 100%;" >
-
-        <jsp:include page="Header.jsp" />
-
-
-        <div>
-            <%
+ <%
                 PersonDBUtil personDBUtil;
                 personDBUtil = new PersonDBUtil();
-                String txtUserName = request.getParameter("txtUserName");
-                String txtPassword = request.getParameter("txtPassword");
+                String username = (String) session.getAttribute("username");
+                String password = (String) session.getAttribute("password");
+                String role = (String) session.getAttribute("role");
+                String txtUserName = request.getParameter("txtUserName") != null ? request.getParameter("txtUserName") : username;
+                String txtPassword = request.getParameter("txtPassword") != null ? request.getParameter("txtPassword") : password;
                 int cbxRoles = 0;
                 try {
-                    cbxRoles = Integer.parseInt(request.getParameter("cbxRoles"));
+                    cbxRoles = request.getParameter("cbxRoles") != null ? Integer.parseInt(request.getParameter("cbxRoles")) : Integer.parseInt(role);
                 } catch (Exception exc) {
                 }
                 Role myrole = new Role();
             %>
+        <jsp:include page="Header.jsp" />
+
+
+        <div>
+           
             <center><h1>Car Parking </h1>
                 <h1>Information Management System</h1>
                 <table border="0">
@@ -66,17 +69,19 @@
                         <%
                             //if user exists!
                             int personID = personDBUtil.CheckPerson(txtUserName, txtPassword, cbxRoles);
-                            if (personID != 0 && request.getParameter("btnSubmit").equals("Submit")) {
-                                session.setAttribute("username", txtUserName);
-                                session.setAttribute("password", txtPassword);
-                                session.setAttribute("role", cbxRoles);
+                            if (personID != 0) {
+                                if (request.getParameter("btnSubmit")!=null&&request.getParameter("btnSubmit").equals("Submit")) {
+                                    session.setAttribute("username", txtUserName);
+                                    session.setAttribute("password", txtPassword);
+                                    session.setAttribute("role", String.valueOf(cbxRoles));
+                                }
                                 String userRole = myrole.showRole(cbxRoles);
                         %>
 
                     <div class="container">
 
                         <div class="row">
-                            <div class="col-sm-12">Welcome,<%= session.getAttribute("role")%>  <%=userRole%> : <%=txtUserName%></div>
+                            <div class="col-sm-12">Welcome,  <%=userRole%> : <%=txtUserName%></div>
                         </div>
                     </div>
 
@@ -114,7 +119,7 @@
                     </div>
 
                     <%} else {
-                        //TEST
+                        //Redirect
                         response.sendRedirect("loginPage.jsp");
                     %>
                     <tr>

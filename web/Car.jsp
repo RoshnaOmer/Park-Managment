@@ -77,6 +77,13 @@
         <title>Car</title>
     </head>
     <body >
+        <%try {
+                PersonDBUtil personDBUtil = new PersonDBUtil();
+                String username = (String) session.getAttribute("username");
+                String password = (String) session.getAttribute("password");
+                String role = (String) session.getAttribute("role");
+                int currentpersonID = personDBUtil.CheckPerson(username, password, Integer.parseInt(role));
+                if (currentpersonID != 0) {%>
         <div class="fullScreen">             <jsp:include page="Header.jsp" />
 
             <form >
@@ -114,7 +121,6 @@
                     </thead>
                     <tbody>
                         <%                            
-                            PersonDBUtil personDBUtil = new PersonDBUtil();
                             CarDBUtil carDBUtil;
                             carDBUtil = new CarDBUtil();
                             boolean canEdit = false;
@@ -145,7 +151,7 @@
                             //SEARCH
                             String key = request.getParameter("txtKeyword") == null ? "" : request.getParameter("txtKeyword");
 
-                            List<Car> allCars = carDBUtil.getAllCars(key,0);
+                            List<Car> allCars = carDBUtil.getAllCars(key, 0);
 
                             for (Car oneCar : allCars) {
                         %>
@@ -155,7 +161,7 @@
                             <td class="td1"><%=oneCar.getCar_model()%></td>
                             <td class="td1"><%=oneCar.getCar_licence_number()%></td>
                             <td class="td1"><%=oneCar.getCar_color()%></td>
-                            <%List<Person> CarOwner = personDBUtil.getAllPeople("", "", oneCar.getCar_driver_foreign_id(),2);
+                            <%List<Person> CarOwner = personDBUtil.getAllPeople("", "", oneCar.getCar_driver_foreign_id(), 2);
 
                                 for (Person onePerson : CarOwner) {%>
                             <td class="td1"><%=onePerson.getPerson_full_name()%></td>
@@ -198,7 +204,7 @@
                                 <option  value="">---Select---</option>
 
                                 <%
-                                    List<Person> allPeople = personDBUtil.getAllPeople("", "", 0,2);
+                                    List<Person> allPeople = personDBUtil.getAllPeople("", "", 0, 2);
 
                                     for (Person onePerson : allPeople) {%>
                                 <option value="<%=onePerson.getPerson_id()%>"><%=onePerson.getPerson_full_name()%></option>
@@ -218,6 +224,12 @@
                 </table>
 
             </center></div>
-        <jsp:include page="Footer.jsp" />
+            <%
+                    } else
+                        response.sendRedirect("loginPage.jsp");
+                } catch (Exception exc) {
+                    response.sendRedirect("loginPage.jsp");
+                }%>
+            <jsp:include page="Footer.jsp" />
     </body>
 </html>

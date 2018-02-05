@@ -79,6 +79,14 @@
         <title>Park</title>
     </head>
     <body >
+        <%
+            try {
+                PersonDBUtil personDBUtil = new PersonDBUtil();
+                String username = (String) session.getAttribute("username");
+                String password = (String) session.getAttribute("password");
+                String role = (String) session.getAttribute("role");
+                int currentpersonID = personDBUtil.CheckPerson(username, password, Integer.parseInt(role));
+                if (currentpersonID != 0) {%>
         <div class="fullScreen">             <jsp:include page="Header.jsp" />
 
             <form >
@@ -109,14 +117,15 @@
                             <th>From</th>
                             <th>To</th>
                             <th>Amount Paid</th>
-                                <%//if authorized then%>
+                                <%  if (role != null && role.equals("1")) {%>
+
+                            <%//if authorized then%>
                             <th>Edit</th>
-                            <th>Delete</th>
+                            <th>Delete</th><%}%>
                         </tr>
                     </thead>
                     <tbody>
                         <%
-                            PersonDBUtil personDBUtil = new PersonDBUtil();
                             CarDBUtil carDBUtil = new CarDBUtil();
                             ParkDBUtil parkDBUtil;
                             parkDBUtil = new ParkDBUtil();
@@ -155,7 +164,7 @@
                             int userRole = 0;
                             String personID = "0";
                             try {
-                                userRole = Integer.parseInt(request.getParameter("userRole"));
+                                userRole = Integer.parseInt(role);
                                 personID = request.getParameter("personID");
                             } catch (Exception exc) {
                             }
@@ -178,6 +187,7 @@
                             <td class="td1"><%=onePark.getTime_form()%></td>
                             <td class="td1"><%=onePark.getTime_to()%></td>
                             <td class="td1"><%=onePark.getAmount_paid()%></td>
+                            <%  if (role != null && role.equals("1")) {%>
 
                             <!--Edit button-->
                             <td class="td1" align=" center">
@@ -226,7 +236,7 @@
                             <input type="text" name="txtUpdate" value="<%=onePark.getPark_id()%>" size="50" style="display:none" />
                             <input class="button " type="submit" value="btnUpdate"   />
                         </td>
-                    </form></tr>
+                    </form></tr><%}%>
                     <%
                             }
                         }%>
@@ -234,6 +244,12 @@
                 </table>
 
             </center></div>
-        <jsp:include page="Footer.jsp" />
+            <%
+                    } else
+                        response.sendRedirect("loginPage.jsp");
+                }catch (Exception exc) {
+                                response.sendRedirect("loginPage.jsp");
+                            }%>
+            <jsp:include page="Footer.jsp" />
     </body>
 </html>

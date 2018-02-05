@@ -39,6 +39,14 @@
         <form name="loginForm" action="MainMenu.jsp" method="">
             <table border="0">               
                 <tbody>
+                    <%
+                         if (request.getParameter("logout")!=null&&request.getParameter("logout").equals("true")) {
+                                  session.removeAttribute("username");
+                                    session.removeAttribute("password");
+                                    session.removeAttribute("role");
+                                    session.invalidate();
+                         }
+                    %>
                     <tr>
                         <td>Role: </td>
                         <td><select name="cbxRoles" required>

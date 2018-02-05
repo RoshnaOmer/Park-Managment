@@ -41,7 +41,8 @@
     <body>
     <center>
         <div class="fullScreen"> 
-            <a href="loginPage.jsp">Logout</a>   
+              <jsp:include page="Header.jsp" />
+ 
             <h1>Park Added!</h1>
             <h4>this is your info</h4>
             <%

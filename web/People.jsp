@@ -77,7 +77,7 @@
     </head>
     <body>
         <div class="fullScreen">
-             <jsp:include page="Header.jsp" />
+            <jsp:include page="Header.jsp" />
 
             <form >
                 <input type="submit" class="button buttonPurple" onclick="RegisterNew()" value="Register New" /> 
@@ -122,64 +122,71 @@
                     </thead>
                     <tbody>
                         <%
-                            PersonDBUtil personDBUtil;
-                            personDBUtil = new PersonDBUtil();
-                            Role myrole = new Role();
-                            boolean canEdit = false;
-                            //EDIT
-                            int EditID = request.getParameter("txtEdit") == null ? 0 : Integer.parseInt(request.getParameter("txtEdit"));
-                            if (EditID > 0) {
-                                canEdit = true;
-                            }
-                            //UPDATE
-                            int UpdateID = request.getParameter("txtUpdate") == null ? 0 : Integer.parseInt(request.getParameter("txtUpdate"));
-                            if (UpdateID > 0) {
+                            try {
+                                PersonDBUtil personDBUtil;
+                                personDBUtil = new PersonDBUtil();
+                                String username = (String) session.getAttribute("username");
+                                String password = (String) session.getAttribute("password");
+                                String role = (String) session.getAttribute("role");
+                                int currentpersonID = personDBUtil.CheckPerson(username, password, Integer.parseInt(role));
+                                if (currentpersonID != 0) {
 
-                                String txtFullName = request.getParameter("txtPersonName");
-                                String txtUserName = request.getParameter("txtUserName");
-                                String txtPassword = request.getParameter("txtPassword");
-                                String txtPhoneN = request.getParameter("txtPersonPhoneNo");
-                                String txtEmail = request.getParameter("txtPersonEmail");
-                                String txtDayofB = request.getParameter("txtPersonBirthday");
-                                int cbxRoles = 0;
-                                Date d = null;
-                                try {
-                                    cbxRoles = Integer.parseInt(request.getParameter("cbxRoles"));
+                                    Role myrole = new Role();
+                                    boolean canEdit = false;
+                                    //EDIT
+                                    int EditID = request.getParameter("txtEdit") == null ? 0 : Integer.parseInt(request.getParameter("txtEdit"));
+                                    if (EditID > 0) {
+                                        canEdit = true;
+                                    }
+                                    //UPDATE
+                                    int UpdateID = request.getParameter("txtUpdate") == null ? 0 : Integer.parseInt(request.getParameter("txtUpdate"));
+                                    if (UpdateID > 0) {
 
-                                } catch (Exception exc) {
-                                    String err = exc.getMessage();
-                                }
+                                        String txtFullName = request.getParameter("txtPersonName");
+                                        String txtUserName = request.getParameter("txtUserName");
+                                        String txtPassword = request.getParameter("txtPassword");
+                                        String txtPhoneN = request.getParameter("txtPersonPhoneNo");
+                                        String txtEmail = request.getParameter("txtPersonEmail");
+                                        String txtDayofB = request.getParameter("txtPersonBirthday");
+                                        int cbxRoles = 0;
+                                        Date d = null;
+                                        try {
+                                            cbxRoles = Integer.parseInt(request.getParameter("cbxRoles"));
 
-                                try {
-                                    SimpleDateFormat sdf = new SimpleDateFormat("EE MMM dd HH:mm:ss z yyyy",
-                                            Locale.ENGLISH);
+                                        } catch (Exception exc) {
+                                            String err = exc.getMessage();
+                                        }
 
-                                    Date parsedDate = sdf.parse(txtDayofB);
-                                    SimpleDateFormat print = new SimpleDateFormat("MMM d, yyyy HH:mm:ss");
-                                    System.out.println(print.format(parsedDate));
-                                    d = parsedDate;
-                                } catch (Exception exc) {
-                                    String err = exc.getMessage();
-                                }
-                                Person newPerson = new Person(UpdateID, cbxRoles, txtFullName, txtEmail, txtUserName,
-                                        txtPassword, txtPhoneN, d);
+                                        try {
+                                            SimpleDateFormat sdf = new SimpleDateFormat("EE MMM dd HH:mm:ss z yyyy",
+                                                    Locale.ENGLISH);
 
-                                personDBUtil.UpdatePerson(newPerson);
-                            }
+                                            Date parsedDate = sdf.parse(txtDayofB);
+                                            SimpleDateFormat print = new SimpleDateFormat("MMM d, yyyy HH:mm:ss");
+                                            System.out.println(print.format(parsedDate));
+                                            d = parsedDate;
+                                        } catch (Exception exc) {
+                                            String err = exc.getMessage();
+                                        }
+                                        Person newPerson = new Person(UpdateID, cbxRoles, txtFullName, txtEmail, txtUserName,
+                                                txtPassword, txtPhoneN, d);
 
-                            //DELETE
-                            String DeleteID = request.getParameter("txtDelete");
-                            if (DeleteID != null) {
-                                personDBUtil.deletePerson(Integer.parseInt(DeleteID));
-                            }
-                            //SEARCH
-                            String key = request.getParameter("txtKeyword") == null ? "" : request.getParameter("txtKeyword");
-                            String phoneN = request.getParameter("txtPhone") == null ? "" : request.getParameter("txtPhone");
-                            int personID = request.getParameter("txtID") == null || request.getParameter("txtID") == "" ? 0 : Integer.parseInt(request.getParameter("txtID"));
-                         
-                            List<Person> allPeople = personDBUtil.getAllPeople(key, phoneN, personID,0);
+                                        personDBUtil.UpdatePerson(newPerson);
+                                    }
 
-                            for (Person onePerson : allPeople) {
+                                    //DELETE
+                                    String DeleteID = request.getParameter("txtDelete");
+                                    if (DeleteID != null) {
+                                        personDBUtil.deletePerson(Integer.parseInt(DeleteID));
+                                    }
+                                    //SEARCH
+                                    String key = request.getParameter("txtKeyword") == null ? "" : request.getParameter("txtKeyword");
+                                    String phoneN = request.getParameter("txtPhone") == null ? "" : request.getParameter("txtPhone");
+                                    int personID = request.getParameter("txtID") == null || request.getParameter("txtID") == "" ? 0 : Integer.parseInt(request.getParameter("txtID"));
+
+                                    List<Person> allPeople = personDBUtil.getAllPeople(key, phoneN, personID, 0);
+
+                                    for (Person onePerson : allPeople) {
                         %>
                         <tr>
 
@@ -230,11 +237,16 @@
                         </td>
                     </form></tr>
                     <%}
+                                }
+                            } else
+                                response.sendRedirect("loginPage.jsp");
+                        } catch (Exception exc) {
+                            response.sendRedirect("loginPage.jsp");
                         }%>
                     </tbody>
                 </table>
 
             </center></div>
-        <jsp:include page="Footer.jsp" />
+            <jsp:include page="Footer.jsp" />
     </body>
 </html>
