@@ -19,7 +19,7 @@ public class Admin extends Person {
     private boolean can_delete;
     private boolean full_permission;
 
-    public Admin(int id, boolean can_add, boolean can_edit, boolean can_delete, boolean full_permission, int person_id, int role_foreign_id, String person_full_name, String person_email, String person_username, String person_password, String person_phone_no, Date person_birthday) {
+    public Admin(int id, boolean can_add, boolean can_edit, boolean can_delete, boolean full_permission, int person_id, int role_foreign_id, String person_full_name, String person_email, String person_username, String person_password, String person_phone_no, String person_birthday) {
         super(person_id, role_foreign_id, person_full_name, person_email, person_username, person_password, person_phone_no, person_birthday);
         this.id = id;
         this.can_add = can_add;

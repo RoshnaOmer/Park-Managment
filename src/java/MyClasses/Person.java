@@ -17,23 +17,19 @@ public class Person {
     SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
     int person_id, role_foreign_id;
     String person_full_name, person_email, person_username, person_password, person_phone_no;
-    Date person_birthday;
+    String person_birthday;
 
-    public Person(String person_full_name, String person_email, String person_username, String person_password, String person_phone_no, Date person_birthday) {
+    public Person(String person_full_name, String person_email, String person_username, String person_password, String person_phone_no, String person_birthday) {
         this.role_foreign_id = 3;
         this.person_full_name = person_full_name;
         this.person_email = person_email;
         this.person_username = person_username;
         this.person_password = person_password;
         this.person_phone_no = person_phone_no;
-        try {
-            this.person_birthday = sdf.parse(sdf.format(person_birthday));
-        } catch (Exception exc) {
-            String Err=exc.getMessage();
-        }
+            this.person_birthday = person_birthday;
     }
 
-    public Person(int person_id, int role_foreign_id, String person_full_name, String person_email, String person_username, String person_password, String person_phone_no, Date person_birthday) {
+    public Person(int person_id, int role_foreign_id, String person_full_name, String person_email, String person_username, String person_password, String person_phone_no, String person_birthday) {
         this.role_foreign_id = role_foreign_id;
         this.person_id = person_id;
 
@@ -101,11 +97,11 @@ public class Person {
         this.person_phone_no = person_phone_no;
     }
 
-    public Date getPerson_birthday() {
+    public String getPerson_birthday() {
         return person_birthday;
     }
 
-    public void setPerson_birthday(Date person_birthday) {
+    public void setPerson_birthday(String person_birthday) {
         this.person_birthday = person_birthday;
     }
 

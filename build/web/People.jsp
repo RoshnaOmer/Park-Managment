@@ -125,6 +125,9 @@
                             try {
                                 PersonDBUtil personDBUtil;
                                 personDBUtil = new PersonDBUtil();
+
+                                final SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd");
+                                final SimpleDateFormat sdformatter = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss.SSS");
                                 String username = (String) session.getAttribute("username");
                                 String password = (String) session.getAttribute("password");
                                 String role = (String) session.getAttribute("role");
@@ -148,28 +151,18 @@
                                         String txtPhoneN = request.getParameter("txtPersonPhoneNo");
                                         String txtEmail = request.getParameter("txtPersonEmail");
                                         String txtDayofB = request.getParameter("txtPersonBirthday");
+                                        Date txtDayofBr = null;
                                         int cbxRoles = 0;
-                                        Date d = null;
                                         try {
+                                            txtDayofBr=sdf.parse(txtDayofB);
                                             cbxRoles = Integer.parseInt(request.getParameter("cbxRoles"));
 
                                         } catch (Exception exc) {
                                             String err = exc.getMessage();
                                         }
 
-                                        try {
-                                            SimpleDateFormat sdf = new SimpleDateFormat("EE MMM dd HH:mm:ss z yyyy",
-                                                    Locale.ENGLISH);
-
-                                            Date parsedDate = sdf.parse(txtDayofB);
-                                            SimpleDateFormat print = new SimpleDateFormat("MMM d, yyyy HH:mm:ss");
-                                            System.out.println(print.format(parsedDate));
-                                            d = parsedDate;
-                                        } catch (Exception exc) {
-                                            String err = exc.getMessage();
-                                        }
                                         Person newPerson = new Person(UpdateID, cbxRoles, txtFullName, txtEmail, txtUserName,
-                                                txtPassword, txtPhoneN, d);
+                                                txtPassword, txtPhoneN, sdformatter.format(txtDayofBr));
 
                                         personDBUtil.UpdatePerson(newPerson);
                                     }

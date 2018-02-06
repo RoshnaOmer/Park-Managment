@@ -28,16 +28,21 @@ public class ParkDBUtil {
             Class.forName(driver).newInstance();
             //------------------------------
             // get db properties
-//            Properties props = new Properties();
-//            props.load(new FileInputStream("MyDBParams.txt"));
-//
-//            String user = props.getProperty("user");
-//            String password = props.getProperty("password");
-//            String dburl = props.getProperty("dburl");
+            
+            Properties prop = new Properties();
+            FileInputStream fis = new FileInputStream(System.getProperty("user.dir")+"\\myconfig.properties");
+
+
+            // load from input stream
+            prop.load(fis);
+
+            String user = prop.getProperty("user");
+            String password = prop.getProperty("password");
+            String dburl = prop.getProperty("dburl");
 
             // connect to database
-            // Conn = DriverManager.getConnection(dburl, user, password);
-            Conn = DriverManager.getConnection("jdbc:jtds:sqlserver://127.0.01:1433/Roshna_Sara_CarParkingIMS", "sa", "password");
+            Conn = DriverManager.getConnection(dburl, user, password);
+//            Conn = DriverManager.getConnection("jdbc:jtds:sqlserver://127.0.01:1433/Roshna_Sara_CarParkingIMS", "sa", "password");
             //----------------------
 
         } catch (Exception e) {

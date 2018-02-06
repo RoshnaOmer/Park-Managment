@@ -76,39 +76,4 @@ public class Car {
         this.car_licence_number = car_licence_number;
     }
     
-    public boolean SaveCar(Car newCar) {
-        Connection conn = null;
-        SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss.SSS");
-        String dateStart = sdf.format(new Date());
-        DataBaseHelper dbHelper = new DataBaseHelper();
-        conn = dbHelper.getAConnection();
-        if (conn != null) {
-            try {//TEST
-                Statement stmt = conn.createStatement();
-                String qry = "INSERT INTO [Roshna_Sara_CarParkingIMS].[dbo].[table_cars]\n"
-                        + "           ([car_model]\n"
-                        + "           ,[car_licence_number]\n"
-                        + "           ,[car_color]\n"
-                        + "           ,[car_driver_foreign_id])\n"
-                        + "     VALUES\n"
-                        + "           ('" + newCar.getCar_model()+ "'\n"
-                        + "           ,'" + newCar.getCar_licence_number()+ "'\n"
-                        + "           ,'" + newCar.getCar_color()+ "'\n"
-                        + "           ," + newCar.getCar_driver_foreign_id() + ")";
-                stmt.execute(qry);
-                return true;
-            } catch (Exception e) {
-                return false;
-            } finally {
-                try {
-                    conn.close();
-                } catch (Exception e) {
-                    e.printStackTrace();
-                }
-            }
-        }
-        return false;
-    }
-
-    
 }
